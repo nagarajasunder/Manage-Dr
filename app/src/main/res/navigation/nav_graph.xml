@@ -6,6 +6,14 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.managedr.ui.add_doctor.fragment.HomeFragment"
-        android:label="HomeFragment" />
+        android:name="com.geekydroid.managedr.ui.add_doctor.fragment.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_addNewDoctorFragment"
+            app:destination="@id/addNewDoctorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addNewDoctorFragment"
+        android:name="com.geekydroid.managedr.ui.add_doctor.fragment.AddNewDoctorFragment"
+        android:label="AddNewDoctorFragment" />
 </navigation>
