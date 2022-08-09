@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.geekydroid.managedr.application.ScreenData
+import com.geekydroid.managedr.databinding.DoctorCardBinding
 import com.geekydroid.managedr.providers.TemplateProvider
 
 class GenericAdapter(private val items:List<ScreenData>,private val layoutId:Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -15,7 +16,7 @@ class GenericAdapter(private val items:List<ScreenData>,private val layoutId:Int
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
+        TemplateProvider.bindView(holder,items[position])
     }
 
     override fun getItemCount() = items.size

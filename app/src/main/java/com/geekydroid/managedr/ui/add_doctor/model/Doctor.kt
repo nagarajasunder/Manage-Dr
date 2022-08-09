@@ -21,7 +21,7 @@ data class Doctor(
     val createdOn:Long = System.currentTimeMillis(),
     @ColumnInfo(name = "updated_on")
     val updatedOn:Long = System.currentTimeMillis()
-) : ScreenData()
+)
 {
     val createdOnFormatted: String
         get() = DateFormat.getDateTimeInstance().format(createdOn)

@@ -6,7 +6,7 @@
 
         <variable
             name="model"
-            type="com.geekydroid.managedr.ui.add_doctor.model.Doctor" />
+            type="com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
