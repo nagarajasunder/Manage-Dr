@@ -9,37 +9,43 @@
             type="com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData" />
     </data>
 
-    <com.google.android.material.card.MaterialCardView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp">
+        android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp">
+            style="@style/cardItem"
+            android:layout_marginBottom="8dp">
 
-            <TextView
-                android:id="@+id/tv_doctor_name"
-                style="@style/textViewRegular"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{model.doctorName}"
-                app:layout_constraintBottom_toTopOf="@+id/tv_doctor_created_on"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:padding="8dp">
 
-            <TextView
-                android:id="@+id/tv_doctor_created_on"
-                style="@style/textViewSmallItalic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@{String.format(@string/created_on,model.createdOnFormatted)}"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_doctor_name" />
+                <TextView
+                    android:id="@+id/tv_doctor_name"
+                    style="@style/textViewRegular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{model.doctorName}"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_doctor_created_on"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tv_doctor_created_on"
+                    style="@style/textViewSmallItalic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@{String.format(@string/created_on,model.createdOnFormatted) }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_doctor_name" />
 
-    </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+    </RelativeLayout>
 </layout>

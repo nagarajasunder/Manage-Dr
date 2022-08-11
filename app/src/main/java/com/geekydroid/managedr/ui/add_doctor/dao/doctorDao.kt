@@ -11,9 +11,16 @@ import kotlinx.coroutines.flow.Flow
 interface doctorDao {
 
     @Insert
-    suspend fun insertNewDoctor(newDoctor:Doctor)
+    suspend fun insertNewDoctor(newDoctor: Doctor)
 
     //Data to be displayed in the home screen
-    @Query("SELECT * FROM DOCTOR")
-    fun getDoctorDataWithTxs():Flow<List<HomeScreenDoctorData>>
+    @Query("SELECT doctor_id as doctorID, " +
+            "doctor_name as doctorName, " +
+            "hospital_name as hospitalName, " +
+            "specialization as specialization, " +
+            "created_on as createdOn, " +
+            "updated_on as updatedOn FROM DOCTOR")
+    fun getDoctorDataWithTxs(): Flow<List<HomeScreenDoctorData>>
+
+
 }

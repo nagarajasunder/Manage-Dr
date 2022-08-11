@@ -36,7 +36,17 @@
 
     <style name="textViewSmallItalic" parent="Widget.AppCompat.TextView">
         <item name="fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textStyle">italic</item>
     </style>
+
+    <style name="cardItem" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/dark_mode</item>
+        <item name="cardCornerRadius">8dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="cardElevation">8dp</item>
+    </style>
+
 
 </resources>

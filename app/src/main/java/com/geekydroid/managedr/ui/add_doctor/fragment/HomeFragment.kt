@@ -12,6 +12,7 @@ import com.geekydroid.managedr.R
 import com.geekydroid.managedr.adapter.GenericAdapter
 import com.geekydroid.managedr.databinding.FragmentHomeBinding
 import com.geekydroid.managedr.providers.Resource
+import com.geekydroid.managedr.ui.add_doctor.model.Doctor
 import com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData
 import com.geekydroid.managedr.ui.add_doctor.viewmodel.HomeFragmentEvents
 import com.geekydroid.managedr.ui.add_doctor.viewmodel.HomeFragmentViewModel
