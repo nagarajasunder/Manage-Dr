@@ -9,4 +9,5 @@
     <string name="hint_area_of_specialization_helper_text">Eg. Cardio,Neuro,General Physician</string>
     <string name="save">Save</string>
     <string name="created_on">Created on %s</string>
+    <string name="hint_enter_the_mobile_number">Enter the Mobile number</string>
 </resources>

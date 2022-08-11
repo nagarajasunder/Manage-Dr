@@ -77,11 +77,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun showSnackBar() {
-
+        //Todo
     }
 
     private fun showLoadingDialog() {
-
+        //Todo
     }
 
     private fun navigateToAddNewDoctorScreen() {

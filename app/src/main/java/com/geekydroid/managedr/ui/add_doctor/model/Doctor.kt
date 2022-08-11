@@ -13,10 +13,14 @@ data class Doctor(
     val doctorID:Int = 0,
     @ColumnInfo(name = "doctor_name")
     val doctorName:String = "",
+    @ColumnInfo(name = "doctor_mobile_number")
+    val doctorMobileNumber:String = "",
     @ColumnInfo(name = "hospital_name")
     val hospitalName:String = "",
     @ColumnInfo(name = "specialization")
     val specialization:String = "",
+    @ColumnInfo(name = "city_id")
+    val cityId:Int = 0,
     @ColumnInfo(name = "created_on")
     val createdOn:Long = System.currentTimeMillis(),
     @ColumnInfo(name = "updated_on")

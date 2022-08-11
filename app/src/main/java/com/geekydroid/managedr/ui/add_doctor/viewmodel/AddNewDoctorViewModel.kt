@@ -1,8 +1,10 @@
 package com.geekydroid.managedr.ui.add_doctor.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.geekydroid.managedr.Utils.TextUtils
 import com.geekydroid.managedr.ui.add_doctor.model.Doctor
 import com.geekydroid.managedr.ui.add_doctor.repository.DoctorRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +23,7 @@ class AddNewDoctorViewModel @Inject constructor(private val repository: DoctorRe
     val doctorName = MutableLiveData("")
     val hospitalName = MutableLiveData("")
     val specialization = MutableLiveData("")
+    val mobileNumber = MutableLiveData("")
 
     fun onSaveCtaClicked() = viewModelScope.launch {
         AddNewDoctorEventsChannel.send(AddNewDoctorEvents.SaveNewDoctor)
@@ -29,7 +32,12 @@ class AddNewDoctorViewModel @Inject constructor(private val repository: DoctorRe
     fun validateAndSaveNewDoctor() = viewModelScope.launch {
         if (doctorName.value.toString().isEmpty()) {
             AddNewDoctorEventsChannel.send(AddNewDoctorEvents.EnterDoctorName)
-        } else {
+        }
+        else if(mobileNumber.value.toString().isNotEmpty() && mobileNumber.value.toString().length > 15)
+        {
+            AddNewDoctorEventsChannel.send(AddNewDoctorEvents.EnterValidMobileNumber)
+        }
+        else {
             saveNewDoctor()
             AddNewDoctorEventsChannel.send(AddNewDoctorEvents.DoctorSavedSuccessFully)
         }
@@ -37,9 +45,10 @@ class AddNewDoctorViewModel @Inject constructor(private val repository: DoctorRe
 
     private suspend fun saveNewDoctor() {
         val newDoctor = Doctor(
-            doctorName = doctorName.value.toString(),
-            hospitalName = hospitalName.value ?: "",
-            specialization = specialization.value ?: ""
+            doctorName = TextUtils.trimText(doctorName.value),
+            hospitalName = TextUtils.trimText(hospitalName.value),
+            specialization = TextUtils.trimText(specialization.value),
+            doctorMobileNumber = TextUtils.trimText(mobileNumber.value)
         )
         repository.addNewDoctor(newDoctor)
     }
@@ -50,4 +59,5 @@ sealed class AddNewDoctorEvents {
     object SaveNewDoctor : AddNewDoctorEvents()
     object EnterDoctorName : AddNewDoctorEvents()
     object DoctorSavedSuccessFully : AddNewDoctorEvents()
+    object EnterValidMobileNumber : AddNewDoctorEvents()
 }

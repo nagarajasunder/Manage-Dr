@@ -66,6 +66,28 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ed_mobile_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="@string/hint_enter_the_mobile_number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:counterEnabled="true"
+            app:counterMaxLength="15"
+            app:layout_constraintTop_toBottomOf="@+id/ed_hospital_name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/inputFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:text="@={viewmodel.mobileNumber}"
+                android:singleLine="true"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ed_specialization"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,7 +97,7 @@
             app:helperTextEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ed_hospital_name">
+            app:layout_constraintTop_toBottomOf="@+id/ed_mobile_number">
 
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/inputFieldStyle"

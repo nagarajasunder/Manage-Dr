@@ -44,8 +44,9 @@ class AddNewDoctorFragment : Fragment()
                 when(event)
                 {
                     AddNewDoctorEvents.SaveNewDoctor -> viewmodel.validateAndSaveNewDoctor()
-                    AddNewDoctorEvents.EnterDoctorName -> showSnackBar("Please enter all the fields")
+                    AddNewDoctorEvents.EnterDoctorName -> showSnackBar("Please enter the doctor name")
                     AddNewDoctorEvents.DoctorSavedSuccessFully -> moveToHomeScreen()
+                    AddNewDoctorEvents.EnterValidMobileNumber -> showSnackBar("Please enter a valid mobile number")
                 }
             }
         }
