@@ -1,4 +1,4 @@
-package com.geekydroid.managedr.Utils
+package com.geekydroid.managedr.utils
 
 object TextUtils {
 

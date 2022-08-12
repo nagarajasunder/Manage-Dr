@@ -7,6 +7,9 @@
         <variable
             name="model"
             type="com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData" />
+        <variable
+            name="listener"
+            type="com.geekydroid.managedr.utils.UiOnClickListener" />
     </data>
 
     <RelativeLayout
@@ -17,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/cardItem"
+            android:onClick="@{() -> listener.onClick(-1,model)}"
             android:layout_marginBottom="8dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout

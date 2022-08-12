@@ -43,9 +43,14 @@ class HomeFragmentViewModel @Inject constructor(private val repository: HomeFrag
         homeFragmentEventsChannel.send(HomeFragmentEvents.addNewDoctorFabClicked)
     }
 
+    fun onDoctorClicked(data: HomeScreenDoctorData) = viewModelScope.launch {
+        homeFragmentEventsChannel.send(HomeFragmentEvents.navigateToDoctorDashboard(data.doctorID))
+    }
+
 
 }
 
 sealed class HomeFragmentEvents {
     object addNewDoctorFabClicked : HomeFragmentEvents()
+    data class navigateToDoctorDashboard(val doctorId:Int) : HomeFragmentEvents()
 }

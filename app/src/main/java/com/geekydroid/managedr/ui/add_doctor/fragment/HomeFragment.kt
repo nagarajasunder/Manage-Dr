@@ -9,17 +9,18 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.geekydroid.managedr.R
+import com.geekydroid.managedr.utils.UiOnClickListener
 import com.geekydroid.managedr.adapter.GenericAdapter
+import com.geekydroid.managedr.application.ScreenData
 import com.geekydroid.managedr.databinding.FragmentHomeBinding
 import com.geekydroid.managedr.providers.Resource
-import com.geekydroid.managedr.ui.add_doctor.model.Doctor
 import com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData
 import com.geekydroid.managedr.ui.add_doctor.viewmodel.HomeFragmentEvents
 import com.geekydroid.managedr.ui.add_doctor.viewmodel.HomeFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(),UiOnClickListener {
 
     private lateinit var binding: FragmentHomeBinding
     private val viewmodel:HomeFragmentViewModel by viewModels()
@@ -43,6 +44,7 @@ class HomeFragment : Fragment() {
                 when(event)
                 {
                     HomeFragmentEvents.addNewDoctorFabClicked -> navigateToAddNewDoctorScreen()
+                    is HomeFragmentEvents.navigateToDoctorDashboard -> navigateToDoctorDashboard(event.doctorId)
                 }
             }
         }
@@ -63,16 +65,21 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun navigateToDoctorDashboard(doctorId:Int) {
+        val action = HomeFragmentDirections.actionHomeFragmentToDoctorDashboardFragment(doctorId)
+        findNavController().navigate(action)
+    }
+
     private fun setUI() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.setHasFixedSize(true)
+        adapter = GenericAdapter(this,R.layout.doctor_card)
+        binding.recyclerView.adapter = adapter
     }
 
     private fun setupAdapter(data:List<HomeScreenDoctorData>? = null) {
         data?.let {
-            adapter = GenericAdapter(it,R.layout.doctor_card)
-            binding.recyclerView.adapter = adapter
-            adapter.notifyDataSetChanged()
+            adapter.submitList(it)
         }
     }
 
@@ -92,6 +99,13 @@ class HomeFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
+    }
+
+    override fun onClick(position: Int, data: ScreenData?) {
+        if (data is HomeScreenDoctorData)
+        {
+            viewmodel.onDoctorClicked(data)
+        }
     }
 
 }

@@ -11,4 +11,6 @@
     <string name="created_on">Created on %s</string>
     <string name="hint_enter_the_mobile_number">Enter the Mobile number</string>
     <string name="content_desc_mobile_number">mobile number</string>
+    <string name="add_service_amount">Add Service</string>
+    <string name="add_collection">Add Collection</string>
 </resources>

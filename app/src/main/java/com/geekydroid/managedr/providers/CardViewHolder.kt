@@ -3,6 +3,7 @@ package com.geekydroid.managedr.providers
 import androidx.databinding.ViewDataBinding
 import androidx.databinding.library.baseAdapters.BR
 import androidx.recyclerview.widget.RecyclerView
+import com.geekydroid.managedr.utils.UiOnClickListener
 import com.geekydroid.managedr.application.ScreenData
 
 class CardViewHolder(private val binding:ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -14,7 +15,10 @@ class CardViewHolder(private val binding:ViewDataBinding) : RecyclerView.ViewHol
             if (obj is ScreenData)
             {
                 binding.setVariable(BR.model,obj)
-                binding.executePendingBindings()
+            }
+            else if (obj is UiOnClickListener)
+            {
+                binding.setVariable(BR.listener,obj)
             }
         }
         binding.executePendingBindings()

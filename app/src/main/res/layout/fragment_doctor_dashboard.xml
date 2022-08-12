@@ -12,13 +12,14 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/doctor_info_card"
+            style="@style/cardItem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            style="@style/cardItem"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,76 +32,102 @@
                     style="@style/textViewRegular"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:ellipsize="end"
+                    android:inputType="textMultiLine"
+                    android:maxLines="2"
                     android:scrollHorizontally="false"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_mobile_icon"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/iv_mobile_icon"
-                    android:maxLines="2"
-                    android:inputType="textMultiLine"
-                    android:ellipsize="end"
                     tools:ignore="TextViewEdits" />
 
                 <ImageView
                     android:id="@+id/iv_mobile_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/phone"
                     android:layout_marginEnd="8dp"
                     android:contentDescription="@string/content_desc_mobile_number"
-                    app:layout_constraintTop_toTopOf="@+id/tv_doctor_name"
+                    android:src="@drawable/phone"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_doctor_name"
-                    app:layout_constraintEnd_toStartOf="@+id/tv_doctor_mobile_number"/>
+                    app:layout_constraintEnd_toStartOf="@+id/tv_doctor_mobile_number"
+                    app:layout_constraintTop_toTopOf="@+id/tv_doctor_name" />
 
                 <TextView
                     android:id="@+id/tv_doctor_mobile_number"
-                    style="@style/textViewSmall"
+                    style="@style/textViewSmallPrimary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:singleLine="true"
                     android:layout_marginStart="8dp"
+                    android:clickable="false"
+                    android:ellipsize="end"
+                    android:inputType="textMultiLine"
+                    android:maxLines="2"
+                    android:scrollHorizontally="false"
+                    android:singleLine="true"
+                    android:textAlignment="textStart"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_doctor_name"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tv_doctor_name"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_doctor_name"
-                    android:scrollHorizontally="false"
-                    android:maxLines="2"
-                    android:inputType="textMultiLine"
-                    android:textAlignment="textStart"
                     tools:ignore="TextViewEdits" />
 
                 <TextView
                     android:id="@+id/tv_hospital_name"
+                    style="@style/textViewSmallPrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tv_doctor_city"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_doctor_name"
-                    android:scrollHorizontally="false"
-                    android:maxLines="2"
-                    android:inputType="textMultiLine"
                     android:layout_marginTop="8dp"
-                    style="@style/textViewSmall"
+                    android:clickable="false"
+                    android:inputType="textMultiLine"
+                    android:maxLines="2"
+                    android:scrollHorizontally="false"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_doctor_city"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_doctor_name"
                     tools:ignore="TextViewEdits" />
 
                 <TextView
                     android:id="@+id/tv_doctor_city"
-                    style="@style/textViewSmall"
+                    style="@style/textViewSmallPrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_doctor_name"
-                    android:layout_marginTop="8dp"
                     android:layout_marginStart="8dp"
-                    android:maxLines="2"
+                    android:layout_marginTop="8dp"
+                    android:clickable="false"
                     android:inputType="textMultiLine"
-                    android:textAlignment="textStart"
+                    android:maxLines="2"
                     android:scrollHorizontally="false"
+                    android:textAlignment="textEnd"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tv_hospital_name"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_doctor_name"
                     tools:ignore="TextViewEdits" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
+
+        <Button
+            android:id="@+id/btn_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/add_service_amount"
+            app:layout_constraintEnd_toStartOf="@+id/btn_collection"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/doctor_info_card" />
+
+        <Button
+            android:id="@+id/btn_collection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/add_collection"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_service"
+            app:layout_constraintTop_toBottomOf="@+id/doctor_info_card" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

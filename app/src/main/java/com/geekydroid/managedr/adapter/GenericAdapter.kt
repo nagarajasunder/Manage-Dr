@@ -4,22 +4,36 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.geekydroid.managedr.application.ScreenData
-import com.geekydroid.managedr.databinding.DoctorCardBinding
+import com.geekydroid.managedr.utils.UiOnClickListener
 import com.geekydroid.managedr.providers.TemplateProvider
-import com.geekydroid.managedr.ui.add_doctor.model.Doctor
 import com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData
 
-class GenericAdapter(private val items:List<HomeScreenDoctorData>,private val layoutId:Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class GenericAdapter(private val listener:UiOnClickListener? = null,private val layoutId:Int) : ListAdapter<ScreenData,RecyclerView.ViewHolder>(DiffUtilCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = DataBindingUtil.inflate<ViewDataBinding>(LayoutInflater.from(parent.context),layoutId,parent,false)
         return TemplateProvider.getViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        TemplateProvider.bindView(holder,items[position])
+        TemplateProvider.bindView(holder,currentList[position],listener)
     }
 
-    override fun getItemCount() = items.size
+    override fun getItemCount() = currentList.size
+
+    class DiffUtilCallback : DiffUtil.ItemCallback<ScreenData>()
+    {
+        override fun areItemsTheSame(oldItem: ScreenData, newItem: ScreenData): Boolean {
+            return TemplateProvider.areItemsSame(oldItem,newItem)
+        }
+
+        override fun areContentsTheSame(oldItem: ScreenData, newItem: ScreenData): Boolean {
+            return TemplateProvider.areContentsSame(oldItem,newItem)
+        }
+
+    }
+
 }

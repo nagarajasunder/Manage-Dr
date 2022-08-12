@@ -11,9 +11,20 @@
         <action
             android:id="@+id/action_homeFragment_to_addNewDoctorFragment"
             app:destination="@id/addNewDoctorFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_doctorDashboardFragment"
+            app:destination="@id/doctorDashboardFragment" />
     </fragment>
     <fragment
         android:id="@+id/addNewDoctorFragment"
         android:name="com.geekydroid.managedr.ui.add_doctor.fragment.AddNewDoctorFragment"
         android:label="AddNewDoctorFragment" />
+    <fragment
+        android:id="@+id/doctorDashboardFragment"
+        android:name="com.geekydroid.managedr.ui.doctordashboard.view.DoctorDashboardFragment"
+        android:label="DoctorDashboardFragment" >
+        <argument
+            android:name="doctor_id"
+            app:argType="integer" />
+    </fragment>
 </navigation>

@@ -1,10 +1,9 @@
 package com.geekydroid.managedr.ui.add_doctor.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.geekydroid.managedr.Utils.TextUtils
+import com.geekydroid.managedr.utils.TextUtils
 import com.geekydroid.managedr.ui.add_doctor.model.Doctor
 import com.geekydroid.managedr.ui.add_doctor.repository.DoctorRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
