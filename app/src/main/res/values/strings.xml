@@ -10,4 +10,5 @@
     <string name="save">Save</string>
     <string name="created_on">Created on %s</string>
     <string name="hint_enter_the_mobile_number">Enter the Mobile number</string>
+    <string name="content_desc_mobile_number">mobile number</string>
 </resources>

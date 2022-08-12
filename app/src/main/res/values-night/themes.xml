@@ -34,6 +34,13 @@
         <item name="android:singleLine">true</item>
     </style>
 
+    <style name="textViewSmall" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
     <style name="textViewSmallItalic" parent="Widget.AppCompat.TextView">
         <item name="fontFamily">@font/roboto_regular</item>
         <item name="android:textSize">12sp</item>
