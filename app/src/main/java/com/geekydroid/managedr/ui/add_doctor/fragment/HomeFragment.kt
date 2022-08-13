@@ -43,7 +43,7 @@ class HomeFragment : Fragment(),UiOnClickListener {
             viewmodel.eventsChannel.collect{ event ->
                 when(event)
                 {
-                    HomeFragmentEvents.addNewDoctorFabClicked -> navigateToAddNewDoctorScreen()
+                    is HomeFragmentEvents.addNewDoctorFabClicked -> navigateToAddNewDoctorScreen()
                     is HomeFragmentEvents.navigateToDoctorDashboard -> navigateToDoctorDashboard(event.doctorId)
                 }
             }
@@ -96,10 +96,6 @@ class HomeFragment : Fragment(),UiOnClickListener {
         findNavController().navigate(action)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-
-    }
 
     override fun onClick(position: Int, data: ScreenData?) {
         if (data is HomeScreenDoctorData)

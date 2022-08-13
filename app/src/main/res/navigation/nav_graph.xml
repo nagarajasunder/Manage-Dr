@@ -26,5 +26,16 @@
         <argument
             android:name="doctor_id"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_doctorDashboardFragment_to_newServiceFragment"
+            app:destination="@id/newServiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newServiceFragment"
+        android:name="com.geekydroid.managedr.ui.addnewservice.ui.NewServiceFragment"
+        android:label="NewServiceFragment" >
+        <argument
+            android:name="doctorId"
+            app:argType="integer" />
     </fragment>
 </navigation>

@@ -7,6 +7,7 @@ class HomeScreenDoctorData(
     val doctorID: Int = 0,
     val doctorName: String = "",
     val hospitalName: String = "",
+    val doctorMobileNumber:String = "",
     val specialization: String = "",
     val createdOn: Long = System.currentTimeMillis(),
     val updatedOn: Long = System.currentTimeMillis()

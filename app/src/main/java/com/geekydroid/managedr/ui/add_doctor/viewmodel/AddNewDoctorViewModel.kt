@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.geekydroid.managedr.utils.TextUtils
-import com.geekydroid.managedr.ui.add_doctor.model.Doctor
+import com.geekydroid.managedr.ui.add_doctor.model.MdrDoctor
 import com.geekydroid.managedr.ui.add_doctor.repository.DoctorRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -29,7 +29,7 @@ class AddNewDoctorViewModel @Inject constructor(private val repository: DoctorRe
     }
 
     fun validateAndSaveNewDoctor() = viewModelScope.launch {
-        if (doctorName.value.toString().isEmpty()) {
+        if (doctorName.value.toString().isEmpty() || (doctorName.value.toString().isNotEmpty() && doctorName.value.toString().length > 20)) {
             AddNewDoctorEventsChannel.send(AddNewDoctorEvents.EnterDoctorName)
         }
         else if(mobileNumber.value.toString().isNotEmpty() && mobileNumber.value.toString().length > 15)
@@ -43,13 +43,13 @@ class AddNewDoctorViewModel @Inject constructor(private val repository: DoctorRe
     }
 
     private suspend fun saveNewDoctor() {
-        val newDoctor = Doctor(
+        val newMdrDoctor = MdrDoctor(
             doctorName = TextUtils.trimText(doctorName.value),
             hospitalName = TextUtils.trimText(hospitalName.value),
             specialization = TextUtils.trimText(specialization.value),
             doctorMobileNumber = TextUtils.trimText(mobileNumber.value)
         )
-        repository.addNewDoctor(newDoctor)
+        repository.addNewDoctor(newMdrDoctor)
     }
 
 }

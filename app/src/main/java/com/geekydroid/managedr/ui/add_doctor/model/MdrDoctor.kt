@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 import com.geekydroid.managedr.application.ScreenData
 import java.text.DateFormat
 
-@Entity(tableName = "DOCTOR")
-data class Doctor(
+@Entity(tableName = "MDR_DOCTOR")
+data class MdrDoctor(
     @ColumnInfo(name = "doctor_id")
     @PrimaryKey(autoGenerate = true)
     val doctorID:Int = 0,
