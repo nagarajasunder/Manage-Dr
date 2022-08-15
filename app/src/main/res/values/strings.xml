@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manage Dr</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -22,4 +23,6 @@
     <string name="hint_add_new_city">Add new city</string>
     <string name="division_name">Division name</string>
     <string name="btn_text_add">Add</string>
+    <string name="date_of_birth">Date of birth %1s</string>
+    <string name="wedding_anniversary_date">Wedding anniversary %1s</string>
 </resources>

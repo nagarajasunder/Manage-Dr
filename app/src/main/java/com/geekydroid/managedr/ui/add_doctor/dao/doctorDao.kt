@@ -18,7 +18,6 @@ interface doctorDao {
         "SELECT doctor_id as doctorID, " +
                 "doctor_name as doctorName, " +
                 "hospital_name as hospitalName, " +
-                "specialization as specialization, " +
                 "doctor_mobile_number as doctorMobileNumber, " +
                 "created_on as createdOn, " +
                 "updated_on as updatedOn FROM MDR_DOCTOR"
@@ -30,7 +29,6 @@ interface doctorDao {
         "SELECT doctor_id as doctorID, " +
                 "doctor_name as doctorName, " +
                 "hospital_name as hospitalName, " +
-                "specialization as specialization, " +
                 "doctor_mobile_number as doctorMobileNumber, " +
                 "created_on as createdOn, " +
                 "updated_on as updatedOn FROM MDR_DOCTOR WHERE doctor_id = :doctorId"
