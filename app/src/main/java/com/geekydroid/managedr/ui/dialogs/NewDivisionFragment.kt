@@ -1,6 +1,5 @@
 package com.geekydroid.managedr.ui.dialogs
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.geekydroid.managedr.R
 import com.geekydroid.managedr.databinding.AddNewCategoryDialogBinding
-import com.geekydroid.managedr.utils.DialogInputType
 import com.geekydroid.managedr.utils.GenericDialogOnClickListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -22,14 +20,14 @@ class NewDivisionFragment : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setStyle(DialogFragment.STYLE_NORMAL,R.style.BottomSheetDialogThemeNoFloating)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetDialogThemeNoFloating)
     }
 
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.add_new_category_dialog, container, false)
@@ -40,7 +38,7 @@ class NewDivisionFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         title = arguments?.getString("title", "") ?: ""
         hint = arguments?.getString("hint", "") ?: ""
-        dialogInputType = arguments?.getString("inputType","") ?: ""
+        dialogInputType = arguments?.getString("inputType", "") ?: ""
 
         binding.title = title
         binding.hint = hint
@@ -56,16 +54,13 @@ class NewDivisionFragment : BottomSheetDialogFragment() {
         if (input.isNullOrEmpty() || input.length > 20) {
             binding.etDivisionName.error = "Please enter a valid $dialogInputType"
         } else {
-            if (context is GenericDialogOnClickListener)
-            {
-                (context as GenericDialogOnClickListener).onClickDialog(input)
-            }
+            listener.onClickDialog(input,dialogInputType)
         }
     }
 
-    fun showDuplicateWarning() {
+    fun showDuplicateWarning(input:String) {
         binding.etDivisionName.error =
-            "Entered $dialogInputType is already present. Duplicates not allowed"
+            "$input is already present. Duplicates not allowed"
     }
 
     fun dismissDialog() {
@@ -73,9 +68,14 @@ class NewDivisionFragment : BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun newInstance(bundle: Bundle? = null): NewDivisionFragment {
+        private lateinit var listener: GenericDialogOnClickListener
+        fun newInstance(
+            bundle: Bundle? = null,
+            callback: GenericDialogOnClickListener,
+        ): NewDivisionFragment {
             val fragment = NewDivisionFragment()
             fragment.arguments = bundle
+            listener = callback
             return fragment
         }
     }

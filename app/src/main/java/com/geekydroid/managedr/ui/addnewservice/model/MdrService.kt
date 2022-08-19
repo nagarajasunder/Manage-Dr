@@ -29,7 +29,7 @@ data class MdrService(
     @ColumnInfo(name = "city_id")
     val cityId: Int = 0,
     @ColumnInfo(name = "service_amount")
-    val serviceAmount: Int,
+    val serviceAmount: Int = 0,
     @ColumnInfo(name = "service_type")
     val serviceType:String = "",
     @ColumnInfo(name = "service_date")
