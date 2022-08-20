@@ -12,6 +12,7 @@ import com.geekydroid.managedr.ui.addnewservice.model.MdrService
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,7 +29,7 @@ class AddNewServiceRepository @Inject constructor(
 
     fun getDoctorName(doctorId: Int) = doctorDao.getDoctorName(doctorId)
 
-    fun getAllCityNames() = cityDao.getAllCityNames()
+    fun getAllCityNames(): Flow<List<MdrCity>> = cityDao.getAllCityNames()
 
     suspend fun addNewCity(city: MdrCity) = externalScope.launch(externalDispatcher) {
         cityDao.insertNewCity(city)
@@ -38,7 +39,7 @@ class AddNewServiceRepository @Inject constructor(
         serviceDao.addNewService(newService)
     }.join()
 
-    fun getAllDivisionNames() = categoryDao.getAllCategories()
+    fun getAllDivisionNames():Flow<List<MdrCategory>> = categoryDao.getAllCategories()
     fun addNewCategory(newCategory: MdrCategory) = externalScope.launch(externalDispatcher) {
         categoryDao.insertNewCategory(newCategory)
     }

@@ -135,7 +135,7 @@
             android:gravity="center_vertical"
             android:minHeight="48dp"
             android:onClick="@{() -> viewmodel.weddingDateClicked()}"
-            android:text="@{@string/wedding_anniversary_date('\n'+viewmodel.weddingAnniversaryDate)}"
+            android:text="@{@string/wedding_anniversary_date(viewmodel.weddingAnniversaryDate)}"
             app:layout_constraintEnd_toStartOf="@+id/iv_wedding_anniversary_date"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_date_of_birth" />

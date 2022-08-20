@@ -79,7 +79,18 @@
             android:minHeight="48dp"
             app:layout_constraintEnd_toStartOf="@+id/fab_add_new_city"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner_category" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_category_helper_hint" />
+
+        <TextView
+            android:id="@+id/tv_category_helper_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner_category"
+            android:text="@string/hint_category_helper"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_marginTop="8dp"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add_new_city"
@@ -121,7 +132,7 @@
         <TextView
             android:id="@+id/tv_transaction_date_picker"
             style="@style/textViewRegular"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -132,9 +143,26 @@
             android:minHeight="48dp"
             android:onClick="@{() -> viewmodel.datePickerClicked()}"
             android:padding="8dp"
-            android:text="@string/hint_select_transaction_date"
+            app:layout_constraintEnd_toStartOf="@+id/iv_transaction_date_picker"
+            android:text="@{@string/hint_select_transaction_date(viewmodel.transactionDateFormatted)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ed_service_amount" />
+
+        <ImageView
+            android:id="@+id/iv_transaction_date_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/calendar_icon"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{() -> viewmodel.datePickerClicked()}"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/hint_select_transaction_date"
+            app:layout_constraintTop_toTopOf="@+id/tv_transaction_date_picker"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_transaction_date_picker"
+            app:layout_constraintStart_toEndOf="@+id/tv_transaction_date_picker"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

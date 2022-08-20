@@ -18,11 +18,16 @@
     <string name="enter_the_city">Enter the city</string>
     <string name="hint_select_transaction_date">Transaction date %s</string>
     <string name="text_add_service">Add Service</string>
-    <string name="enter_transaction_amount">Enter Transaction amount</string>
+    <string name="enter_transaction_amount">Transaction amount</string>
     <string name="hint_add_new_category">Add new category</string>
     <string name="hint_add_new_city">Add new city</string>
     <string name="division_name">Division name</string>
     <string name="btn_text_add">Add</string>
     <string name="date_of_birth">Date of birth %1s</string>
     <string name="wedding_anniversary_date">Wedding anniversary %1s</string>
+    <string name="error_please_select_a_city">Please select a city</string>
+    <string name="error_please_select_division">Please select a division</string>
+    <string name="error_please_select_a_transaction_date">Please select the transaction date</string>
+    <string name="new_service_created">New service created successfully</string>
+    <string name="hint_category_helper">Eg. Cardio,Oral care</string>
 </resources>
