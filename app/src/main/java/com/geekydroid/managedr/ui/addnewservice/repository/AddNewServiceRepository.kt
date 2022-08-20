@@ -13,7 +13,6 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,7 +28,7 @@ class AddNewServiceRepository @Inject constructor(
 
     fun getDoctorName(doctorId: Int) = doctorDao.getDoctorName(doctorId)
 
-    fun getAllCityNames(): Flow<List<MdrCity>> = cityDao.getAllCityNames()
+    fun getAllCityNames(): Flow<List<MdrCity>> = cityDao.getAllCities()
 
     suspend fun addNewCity(city: MdrCity) = externalScope.launch(externalDispatcher) {
         cityDao.insertNewCity(city)

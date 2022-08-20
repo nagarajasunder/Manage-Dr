@@ -1,17 +1,15 @@
 package com.geekydroid.managedr.ui.addnewservice.ui
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.TextView
+import android.widget.AutoCompleteTextView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -28,8 +26,8 @@ import com.geekydroid.managedr.utils.GenericDialogOnClickListener
 import com.geekydroid.managedr.utils.uiutils.PickerUtils
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import org.w3c.dom.Text
 
+private const val TAG = "NewServiceFragment"
 @AndroidEntryPoint
 class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
 
@@ -43,7 +41,7 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
     private var citySpinnerList: MutableList<String> = mutableListOf("Select a city")
     private var divisionSpinnerList: MutableList<String> = mutableListOf("Select a division")
     private lateinit var host: MenuHost
-    private lateinit var transactionType:TransactionType
+    private lateinit var transactionType: TransactionType
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,66 +78,51 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
                     R.id.cta_save -> {
-                        viewmodel.onSaveCtaClicked(doctorId,transactionType)
+                        viewmodel.onSaveCtaClicked(doctorId, transactionType)
                         return true
                     }
                 }
                 return false
             }
 
-        },viewLifecycleOwner,Lifecycle.State.RESUMED)
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
     }
 
     private fun setUI() {
-        binding.spinnerCity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, index: Int, p3: Long) {
+        (binding.spinnerCity.editText as AutoCompleteTextView).onItemClickListener =
+            AdapterView.OnItemClickListener { _, _, index, _ ->
                 viewmodel.updateSelectedCity(index)
             }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
-
-        }
-
-        binding.spinnerCategory.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, index: Int, p3: Long) {
-                    viewmodel.updateSelectedCategory(index)
-                }
-
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                }
-
+        (binding.spinnerCategory.editText as AutoCompleteTextView).onItemClickListener =
+            AdapterView.OnItemClickListener { _, _, index, _ ->
+                viewmodel.updateSelectedCategory(index)
             }
     }
 
     private fun setupDivisionSpinner(list: List<String>) {
         divisionSpinnerList.clear()
-        divisionSpinnerList.add("Select a division")
         divisionSpinnerList.addAll(list)
         divisionSpinnerAdapter = ArrayAdapter(requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
+            android.R.layout.simple_dropdown_item_1line,
             divisionSpinnerList)
-        binding.spinnerCategory.adapter = divisionSpinnerAdapter
-        viewmodel.categorySpinnerIndex?.let {
-            binding.spinnerCategory.setSelection(it)
+        (binding.spinnerCategory.editText as AutoCompleteTextView).setAdapter(divisionSpinnerAdapter)
+        if (viewmodel.selectedCategoryIndex != -1) {
+            (binding.spinnerCategory.editText as AutoCompleteTextView).setText(divisionSpinnerList[viewmodel.selectedCategoryIndex])
         }
     }
 
     private fun setupCitySpinner(list: List<String>) {
         citySpinnerList.clear()
-        citySpinnerList.add("Select a city")
         citySpinnerList.addAll(list)
-        citySpinnerAdapter = ArrayAdapter(requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
+        citySpinnerAdapter = ArrayAdapter<String>(requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
             citySpinnerList)
-        binding.spinnerCity.adapter = citySpinnerAdapter
-        viewmodel.citySpinnerIndex?.let {
-            binding.spinnerCity.setSelection(it)
+        if (viewmodel.selectedCityIndex != -1) {
+            (binding.spinnerCity.editText as AutoCompleteTextView).setText(citySpinnerList[viewmodel.selectedCityIndex])
         }
+        (binding.spinnerCity.editText as AutoCompleteTextView).setAdapter(citySpinnerAdapter)
     }
 
     private fun observeUiEvents() {
@@ -165,7 +148,8 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
                     NewServiceFragmentEvents.selectCityError -> showCitySpinnerError()
                     NewServiceFragmentEvents.transactionAmountError -> showTransactionAmountError()
                     NewServiceFragmentEvents.dismissNewDivisionDialog -> dismissNewDivisionDialog()
-                    is NewServiceFragmentEvents.showDuplicateWarningInDialog -> showDuplicateWarning(it.input)
+                    is NewServiceFragmentEvents.showDuplicateWarningInDialog -> showDuplicateWarning(
+                        it.input)
                     NewServiceFragmentEvents.transactionDateError -> showTransactionDateError()
                 }
             }
@@ -173,11 +157,12 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
     }
 
     private fun showSnackbar(message: String) {
-        Snackbar.make(requireView(),message,Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun showTransactionDateError() {
-        binding.tvTransactionDatePicker.error = requireContext().getString(R.string.error_please_select_a_transaction_date)
+        binding.tvTransactionDatePicker.error =
+            requireContext().getString(R.string.error_please_select_a_transaction_date)
     }
 
     private fun showTransactionAmountError() {
@@ -185,18 +170,12 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
     }
 
     private fun showCategorySpinnerError() {
-        val errorText = (binding.spinnerCategory.selectedView as TextView)
-        errorText.setTextColor(Color.RED)
-        errorText.error = ""
-        errorText.text = requireContext().getString(R.string.error_please_select_division)
+        binding.spinnerCategory.error =
+            requireContext().getString(R.string.error_please_select_division)
     }
 
-    private fun showCitySpinnerError()
-    {
-        val errorText = (binding.spinnerCity.selectedView as TextView)
-        errorText.setTextColor(Color.RED)
-        errorText.error = ""
-        errorText.text = requireContext().getString(R.string.error_please_select_a_city)
+    private fun showCitySpinnerError() {
+        binding.spinnerCity.error = requireContext().getString(R.string.error_please_select_a_city)
     }
 
     private fun openDatePicker() {
@@ -204,7 +183,7 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
         datePicker.addOnPositiveButtonClickListener {
             viewmodel.updateTransactionDate(it)
         }
-        datePicker.show(requireActivity().supportFragmentManager,"datepicker")
+        datePicker.show(requireActivity().supportFragmentManager, "datepicker")
     }
 
     private fun showBottomSheetDialog(type: DialogInputType) {
@@ -239,13 +218,11 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
 
     }
 
-    private fun showDuplicateWarning(input: String)
-    {
+    private fun showDuplicateWarning(input: String) {
         newDivisionFragment.showDuplicateWarning(input)
     }
 
-    private fun dismissNewDivisionDialog()
-    {
+    private fun dismissNewDivisionDialog() {
         newDivisionFragment.dismissDialog()
     }
 

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="model"
+            type="com.geekydroid.managedr.ui.doctordashboard.model.DoctorDashboardTxData" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/cardItem">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/tv_transaction_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_division"
+                    app:layout_constraintTop_toTopOf="@+id/tv_transaction_amount"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_transaction_amount"
+                    android:text="@{model.transactionDateFormatted}"
+                    style="@style/textViewRegular"/>
+
+                <TextView
+                    android:id="@+id/tv_division"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/tv_transaction_date"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_transaction_type"
+                    app:layout_constraintTop_toTopOf="@+id/tv_transaction_amount"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_transaction_amount"
+                    android:text="@{model.divisionName}"
+                    style="@style/textViewRegular"/>
+
+                <TextView
+                    android:id="@+id/tv_transaction_type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/tv_division"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_transaction_amount"
+                    app:layout_constraintTop_toTopOf="@+id/tv_transaction_amount"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_transaction_amount"
+                    android:text="@{model.transactionType}"
+                    style="@style/textViewRegular"/>
+
+                <TextView
+                    android:id="@+id/tv_transaction_amount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/tv_transaction_date"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textAlignment="textEnd"
+                    style="@style/textServiceTxStyle"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

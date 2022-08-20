@@ -35,10 +35,6 @@ class AddNewServiceFragmentViewmodel @Inject constructor(private val repository:
         MutableLiveData(listOf<MdrCategory>())
     val categoryData: LiveData<List<MdrCategory>> = _categoryData
 
-    var citySpinnerIndex: Int? = null
-        private set
-    var categorySpinnerIndex: Int? = null
-        private set
 
     private var transactionDate:Long = 0L
     var transactionDateFormatted:MutableLiveData<String> = MutableLiveData("")
@@ -63,8 +59,10 @@ class AddNewServiceFragmentViewmodel @Inject constructor(private val repository:
     val _transactionAmount: MutableLiveData<String> = MutableLiveData("")
     val transactionAmount: LiveData<String> = _transactionAmount
 
-    private var selectedCityIndex: Int = -1
-    private var selectedCategoryIndex: Int = -1
+    var selectedCityIndex: Int = -1
+        private set
+    var selectedCategoryIndex: Int = -1
+        private set
 
     fun getAllCities() = viewModelScope.launch {
         repository.getAllCityNames().collect {
@@ -169,28 +167,12 @@ class AddNewServiceFragmentViewmodel @Inject constructor(private val repository:
     }
 
     fun updateSelectedCity(index: Int) {
-        if (index > 0) {
-            selectedCityIndex = index-1
-            citySpinnerIndex = index
-        }
-        else
-        {
-            citySpinnerIndex = null
-            selectedCityIndex = -1
-        }
-        Log.d("addNewService", "onItemSelected: vm $selectedCityIndex")
+        selectedCityIndex = index
+        Log.d("City Index", "updateSelectedCity: $selectedCityIndex")
     }
 
     fun updateSelectedCategory(index: Int) {
-        if (index > 0) {
-            selectedCategoryIndex = index-1
-            categorySpinnerIndex = index
-        }
-        else
-        {
-            selectedCategoryIndex = -1
-            categorySpinnerIndex = null
-        }
+        selectedCategoryIndex = index
     }
 
     fun updateTransactionDate(date: Long) {

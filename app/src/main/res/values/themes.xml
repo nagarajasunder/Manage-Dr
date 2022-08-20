@@ -23,8 +23,20 @@
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Headline</item>
     </style>
 
+    <style name="textServiceTxStyle" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/green</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
     <style name="inputFieldStyle" parent="Widget.AppCompat.EditText">
         <item name="fontFamily">@font/roboto_light</item>
+    </style>
+    <style name="inputLayoutStyle" parent="Base.Widget.MaterialComponents.TextInputLayout">
+        <item name="materialThemeOverlay">
+            @style/ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox
+        </item>
+        <item name="boxCollapsedPaddingTop">0dp</item>
     </style>
 
     <style name="textViewRegular" parent="Widget.AppCompat.TextView">
@@ -63,5 +75,5 @@
     </style>
 
 
-
+    <color name="green">#38b000</color>
 </resources>

@@ -13,5 +13,5 @@ interface CityDao {
     suspend fun insertNewCity(vararg city: MdrCity)
 
     @Query("SELECT * FROM MDR_CITY")
-    fun getAllCityNames(): Flow<List<MdrCity>>
+    fun getAllCities(): Flow<List<MdrCity>>
 }

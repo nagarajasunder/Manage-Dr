@@ -4,18 +4,18 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="content_desc_add_new_doctor">Add New Doctor</string>
-    <string name="hint_enter_the_doctor_name">Enter the Doctor Name</string>
-    <string name="hint_enter_the_hospital_name">Enter the Hospital/Clinic name</string>
-    <string name="hint_enter_the_area_of_specialization">Enter the Area of Specialization</string>
+    <string name="hint_enter_the_doctor_name">Doctor Name</string>
+    <string name="hint_enter_the_hospital_name">Hospital/Clinic name</string>
+    <string name="hint_enter_the_area_of_specialization">Area of Specialization</string>
     <string name="hint_area_of_specialization_helper_text">Eg. Cardio,Neuro,General Physician</string>
     <string name="save">Save</string>
     <string name="created_on">Created on %s</string>
-    <string name="hint_enter_the_mobile_number">Enter the Mobile number</string>
+    <string name="hint_enter_the_mobile_number">Mobile number</string>
     <string name="content_desc_mobile_number">mobile number</string>
     <string name="add_service">New Service</string>
     <string name="add_collection">New Return</string>
-    <string name="hint_enter_the_category">Enter the category</string>
-    <string name="enter_the_city">Enter the city</string>
+    <string name="hint_enter_the_category">Category name</string>
+    <string name="enter_the_city">City name</string>
     <string name="hint_select_transaction_date">Transaction date %s</string>
     <string name="text_add_service">Add Service</string>
     <string name="text_add_return">Add Return</string>
@@ -32,4 +32,12 @@
     <string name="new_service_created">New service created successfully</string>
     <string name="hint_category_helper">Eg. Cardio,Oral care</string>
     <string name="new_collection_created">New return created successfully</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="hint_service">Service</string>
+    <string name="hint_return">Return</string>
+    <string name="hint_search">Search</string>
+    <string name="hint_clear">Clear</string>
+    <string name="hint_city">City</string>
+    <string name="hint_division">Division</string>
 </resources>
