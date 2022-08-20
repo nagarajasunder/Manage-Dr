@@ -4,9 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="com.geekydroid.managedr.application.TransactionType"/>
         <variable
             name="viewmodel"
             type="com.geekydroid.managedr.ui.addnewservice.viewmodel.AddNewServiceFragmentViewmodel" />
+        <variable
+            name="transactionType"
+            type="com.geekydroid.managedr.application.TransactionType" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/text_add_service"
+            android:text="@{transactionType == TransactionType.SERVICE ? @string/text_add_service : @string/text_add_return}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -49,7 +53,6 @@
             android:minHeight="48dp"
             app:layout_constraintEnd_toStartOf="@+id/fab_add_new_category"
             app:layout_constraintStart_toStartOf="parent"
-
             app:layout_constraintTop_toBottomOf="@+id/tv_doctor_name" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

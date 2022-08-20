@@ -13,7 +13,7 @@
         <entry key="app/src/main/res/layout/add_new_category_dialog.xml" value="0.2986842105263158" />
         <entry key="app/src/main/res/layout/doctor_card.xml" value="0.35520833333333335" />
         <entry key="app/src/main/res/layout/fragment_add_new_doctor.xml" value="0.29912280701754385" />
-        <entry key="app/src/main/res/layout/fragment_doctor_dashboard.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_doctor_dashboard.xml" value="0.29912280701754385" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/fragment_new_service.xml" value="0.2995614035087719" />
         <entry key="app/src/main/res/menu/add_new_doctor_menu.xml" value="0.35520833333333335" />

@@ -7,15 +7,18 @@ import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.geekydroid.managedr.R
+import com.geekydroid.managedr.application.TransactionType
 import com.geekydroid.managedr.databinding.FragmentNewServiceBinding
 import com.geekydroid.managedr.ui.addnewservice.viewmodel.AddNewServiceFragmentViewmodel
 import com.geekydroid.managedr.ui.addnewservice.viewmodel.NewServiceFragmentEvents
@@ -39,7 +42,8 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
     private lateinit var divisionSpinnerAdapter: ArrayAdapter<String>
     private var citySpinnerList: MutableList<String> = mutableListOf("Select a city")
     private var divisionSpinnerList: MutableList<String> = mutableListOf("Select a division")
-    private lateinit var host: FragmentActivity
+    private lateinit var host: MenuHost
+    private lateinit var transactionType:TransactionType
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,10 +57,11 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         host = requireActivity()
-        binding.viewmodel = viewmodel
-        binding.lifecycleOwner = viewLifecycleOwner
-
         doctorId = args.doctorId
+        transactionType = args.transactionType
+        binding.viewmodel = viewmodel
+        binding.transactionType = transactionType
+        binding.lifecycleOwner = viewLifecycleOwner
         viewmodel.getDoctorName(doctorId)
         setUI()
         observeUiEvents()
@@ -75,21 +80,20 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
                     R.id.cta_save -> {
-                        viewmodel.onSaveCtaClicked(doctorId)
+                        viewmodel.onSaveCtaClicked(doctorId,transactionType)
                         return true
                     }
                 }
                 return false
             }
 
-        })
+        },viewLifecycleOwner,Lifecycle.State.RESUMED)
 
     }
 
     private fun setUI() {
         binding.spinnerCity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, index: Int, p3: Long) {
-                Log.d("addNewService", "onItemSelected: $index")
                 viewmodel.updateSelectedCity(index)
             }
 
@@ -151,6 +155,10 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
                     )
                     NewServiceFragmentEvents.newServiceCreated -> {
                         showSnackbar(requireContext().getString(R.string.new_service_created))
+                        findNavController().navigateUp()
+                    }
+                    NewServiceFragmentEvents.newCollectionCreated -> {
+                        showSnackbar(requireContext().getString(R.string.new_collection_created))
                         findNavController().navigateUp()
                     }
                     NewServiceFragmentEvents.selectCategoryError -> showCategorySpinnerError()

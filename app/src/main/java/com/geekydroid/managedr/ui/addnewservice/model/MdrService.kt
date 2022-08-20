@@ -30,8 +30,8 @@ data class MdrService(
     val cityId: Int = 0,
     @ColumnInfo(name = "service_amount")
     val serviceAmount: Int = 0,
-    @ColumnInfo(name = "service_type")
-    val serviceType:String = "",
+    @ColumnInfo(name = "transaction_type")
+    val transactionType:String = "",
     @ColumnInfo(name = "service_date")
     val serviceDate: Date? = null,
     @ColumnInfo(name = "created_on")

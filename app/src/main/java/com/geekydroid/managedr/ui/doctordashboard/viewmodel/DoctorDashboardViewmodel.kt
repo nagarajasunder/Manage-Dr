@@ -33,6 +33,10 @@ class DoctorDashboardViewmodel @Inject constructor(private val repository: Docto
     fun AddNewServiceOnClick() = viewModelScope.launch {
         doctorDashboardEventsChannel.send(doctorDashboardEvents.addNewServiceClicked)
     }
+
+    fun AddNewCollectionOnClick() = viewModelScope.launch {
+        doctorDashboardEventsChannel.send(doctorDashboardEvents.addNewCollectionClicked)
+    }
 }
 
 sealed class doctorDashboardEvents

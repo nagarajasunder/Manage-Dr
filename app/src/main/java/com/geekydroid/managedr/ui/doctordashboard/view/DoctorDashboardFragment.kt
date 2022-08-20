@@ -13,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.geekydroid.managedr.R
+import com.geekydroid.managedr.application.TransactionType
 import com.geekydroid.managedr.databinding.FragmentDoctorDashboardBinding
 import com.geekydroid.managedr.providers.Resource
 import com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData
@@ -57,15 +58,20 @@ class DoctorDashboardFragment : Fragment() {
             viewmodel.doctorDashboardEvent.collect{
                 when(it)
                 {
-                    doctorDashboardEvents.addNewCollectionClicked -> TODO()
+                    doctorDashboardEvents.addNewCollectionClicked -> navigateToNewCollectionFragment()
                     doctorDashboardEvents.addNewServiceClicked -> navigateToNewServiceFragment()
                 }
             }
         }
     }
 
+    private fun navigateToNewCollectionFragment() {
+        val action = DoctorDashboardFragmentDirections.actionDoctorDashboardFragmentToNewServiceFragment(doctorId,TransactionType.COLLECTION)
+        findNavController().navigate(action)
+    }
+
     private fun navigateToNewServiceFragment() {
-        val action = DoctorDashboardFragmentDirections.actionDoctorDashboardFragmentToNewServiceFragment(doctorId)
+        val action = DoctorDashboardFragmentDirections.actionDoctorDashboardFragmentToNewServiceFragment(doctorId,TransactionType.SERVICE)
         findNavController().navigate(action)
     }
 

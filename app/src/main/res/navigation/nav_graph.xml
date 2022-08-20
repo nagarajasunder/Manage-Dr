@@ -37,5 +37,8 @@
         <argument
             android:name="doctorId"
             app:argType="integer" />
+        <argument
+            android:name="transactionType"
+            app:argType="com.geekydroid.managedr.application.TransactionType" />
     </fragment>
 </navigation>
