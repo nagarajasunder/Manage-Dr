@@ -1,6 +1,7 @@
 package com.geekydroid.managedr.ui.add_doctor.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
@@ -17,8 +18,10 @@ import com.geekydroid.managedr.providers.Resource
 import com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData
 import com.geekydroid.managedr.ui.add_doctor.viewmodel.HomeFragmentEvents
 import com.geekydroid.managedr.ui.add_doctor.viewmodel.HomeFragmentViewModel
+import com.geekydroid.managedr.ui.doctordashboard.model.DoctorDashboardTxData
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val TAG = "HomeFragment"
 @AndroidEntryPoint
 class HomeFragment : Fragment(),UiOnClickListener {
 

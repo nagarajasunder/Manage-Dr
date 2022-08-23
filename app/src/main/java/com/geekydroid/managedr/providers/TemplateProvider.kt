@@ -1,5 +1,6 @@
 package com.geekydroid.managedr.providers
 
+import android.util.Log
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.geekydroid.managedr.application.ScreenData
@@ -7,6 +8,7 @@ import com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData
 import com.geekydroid.managedr.ui.doctordashboard.model.DoctorDashboardTxData
 import com.geekydroid.managedr.utils.UiOnClickListener
 
+private const val TAG = "TemplateProvider"
 object TemplateProvider {
 
     fun getViewHolder(binding: ViewDataBinding): RecyclerView.ViewHolder = CardViewHolder(binding)

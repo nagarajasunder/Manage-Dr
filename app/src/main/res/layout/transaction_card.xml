@@ -6,11 +6,15 @@
         <variable
             name="model"
             type="com.geekydroid.managedr.ui.doctordashboard.model.DoctorDashboardTxData" />
+        <variable
+            name="listener"
+            type="com.geekydroid.managedr.utils.UiOnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -24,49 +28,60 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp">
 
-                <TextView
-                    android:id="@+id/tv_transaction_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tv_division"
-                    app:layout_constraintTop_toTopOf="@+id/tv_transaction_amount"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_transaction_amount"
-                    android:text="@{model.transactionDateFormatted}"
-                    style="@style/textViewRegular"/>
 
                 <TextView
-                    android:id="@+id/tv_division"
-                    android:layout_width="0dp"
+                    android:id="@+id/tv_division_name"
+                    style="@style/textViewRegular"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@+id/tv_transaction_date"
-                    app:layout_constraintEnd_toStartOf="@+id/tv_transaction_type"
-                    app:layout_constraintTop_toTopOf="@+id/tv_transaction_amount"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_transaction_amount"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="@{model.divisionName}"
-                    style="@style/textViewRegular"/>
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_transaction_date"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_city_name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv_transaction_type"
+                    android:id="@+id/tv_city_name"
+                    style="@style/textViewSubtitlePrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@+id/tv_division"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@{model.cityName}"
+                    android:maxLines="2"
+                    app:layout_constraintStart_toEndOf="@+id/tv_division_name"
                     app:layout_constraintEnd_toStartOf="@+id/tv_transaction_amount"
-                    app:layout_constraintTop_toTopOf="@+id/tv_transaction_amount"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_transaction_amount"
-                    android:text="@{model.transactionType}"
-                    style="@style/textViewRegular"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_division_name"/>
 
                 <TextView
                     android:id="@+id/tv_transaction_amount"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@+id/tv_transaction_date"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@{String.valueOf(model.transactionAmount)}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    app:layout_constraintStart_toEndOf="@+id/tv_city_name"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:textAlignment="textEnd"
-                    style="@style/textServiceTxStyle"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
+                <TextView
+                    android:id="@+id/tv_transaction_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_division_name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    style="@style/textViewMediumItalic"
+                    android:text="Aug 25, 2022"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

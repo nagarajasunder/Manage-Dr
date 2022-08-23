@@ -48,6 +48,17 @@
         <item name="android:textStyle">italic</item>
     </style>
 
+    <style name="textViewSubtitlePrimary" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.ActionMode.Subtitle</item>
+    </style>
+
+    <style name="textViewMediumItalic" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
     <style name="cardItem" parent="Widget.MaterialComponents.CardView">
         <item name="cardBackgroundColor">@color/dark_mode</item>
         <item name="cardCornerRadius">8dp</item>

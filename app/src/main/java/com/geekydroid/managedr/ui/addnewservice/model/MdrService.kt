@@ -1,10 +1,7 @@
 package com.geekydroid.managedr.ui.addnewservice.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
+import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
-import androidx.room.PrimaryKey
 import com.geekydroid.managedr.ui.add_doctor.model.MdrDoctor
 import java.util.*
 
@@ -22,7 +19,7 @@ data class MdrService(
     @ColumnInfo(name = "service_id")
     @PrimaryKey(autoGenerate = true)
     val serviceId: Int = 0,
-    @ColumnInfo(name = "serviced_doctor_id")
+    @ColumnInfo(name = "serviced_doctor_id", index = true)
     val servicedDoctorId: Int = 0,
     @ColumnInfo(name = "category_id")
     val categoryId: Int = 0,

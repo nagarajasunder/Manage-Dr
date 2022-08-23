@@ -37,7 +37,7 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
     private var doctorId:Int = -1
     private val args:DoctorDashboardFragmentArgs by navArgs()
     private val viewmodel:DoctorDashboardViewmodel by viewModels()
-    private lateinit var adapter:GenericAdapter
+    private lateinit var adapter: GenericAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,6 +56,16 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
 
         setUI()
 
+        viewmodel.getTransactionData(doctorId)
+        viewmodel.transactionData.observe(viewLifecycleOwner){
+            when(it)
+            {
+                is Resource.Error -> Any()
+                is Resource.Loading -> Any()
+                is Resource.Success -> updateList(it.data)
+            }
+        }
+
         viewmodel.getDoctorDataById(doctorId)
         viewmodel.doctorData.observe(viewLifecycleOwner){
             when(it)
@@ -68,29 +78,21 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
         viewmodel.cityData.observe(viewLifecycleOwner){
             setupCitySpinner(it)
         }
-        viewmodel.getTransactionData(doctorId)
-        viewmodel.transactionData.observe(viewLifecycleOwner){
-            when(it)
-            {
-                is Resource.Error -> Any()
-                is Resource.Loading -> Any()
-                is Resource.Success -> updateList(it.data)
-            }
-        }
         observeUiEvents()
     }
 
     private fun updateList(data: List<DoctorDashboardTxData>?) {
         data?.let {
+            Log.d(TAG, "updateList: $it")
             adapter.submitList(it)
         }
     }
 
     private fun setUI() {
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerView.setHasFixedSize(true)
+        binding.dashboardRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.dashboardRecyclerView.setHasFixedSize(true)
         adapter = GenericAdapter(this,R.layout.transaction_card)
-        binding.recyclerView.adapter = adapter
+        binding.dashboardRecyclerView.adapter = adapter
     }
 
     private fun setupCitySpinner(cityList: List<MdrCity>) {

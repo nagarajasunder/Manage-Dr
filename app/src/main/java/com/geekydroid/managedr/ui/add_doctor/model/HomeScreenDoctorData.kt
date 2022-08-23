@@ -3,7 +3,7 @@ package com.geekydroid.managedr.ui.add_doctor.model
 import com.geekydroid.managedr.application.ScreenData
 import java.text.DateFormat
 
-class HomeScreenDoctorData(
+data class HomeScreenDoctorData(
     val doctorID: Int = 0,
     val doctorName: String = "",
     val hospitalName: String = "",
