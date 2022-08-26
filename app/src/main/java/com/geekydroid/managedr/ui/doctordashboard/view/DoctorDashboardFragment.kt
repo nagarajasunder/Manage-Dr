@@ -1,5 +1,6 @@
 package com.geekydroid.managedr.ui.doctordashboard.view
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -22,14 +24,15 @@ import com.geekydroid.managedr.application.TransactionType
 import com.geekydroid.managedr.databinding.FragmentDoctorDashboardBinding
 import com.geekydroid.managedr.providers.Resource
 import com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData
+import com.geekydroid.managedr.ui.addnewservice.model.MdrCategory
 import com.geekydroid.managedr.ui.addnewservice.model.MdrCity
 import com.geekydroid.managedr.ui.doctordashboard.model.DoctorDashboardTxData
 import com.geekydroid.managedr.ui.doctordashboard.viewmodel.DoctorDashboardViewmodel
 import com.geekydroid.managedr.ui.doctordashboard.viewmodel.doctorDashboardEvents
 import com.geekydroid.managedr.utils.UiOnClickListener
+import com.geekydroid.managedr.utils.uiutils.PickerUtils
 import dagger.hilt.android.AndroidEntryPoint
 
-private const val TAG = "DoctorDashboardFragment"
 @AndroidEntryPoint
 class DoctorDashboardFragment : Fragment(),UiOnClickListener {
 
@@ -65,7 +68,6 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
                 is Resource.Success -> updateList(it.data)
             }
         }
-
         viewmodel.getDoctorDataById(doctorId)
         viewmodel.doctorData.observe(viewLifecycleOwner){
             when(it)
@@ -75,32 +77,91 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
                 is Resource.Success -> updateDoctorData(it.data)
             }
         }
-        viewmodel.cityData.observe(viewLifecycleOwner){
-            setupCitySpinner(it)
-        }
         observeUiEvents()
+        (binding.spinnerCity.editText as AutoCompleteTextView).setOnClickListener {
+            if (viewmodel.cityNames.isNotEmpty())
+            {
+                openCitySelectionDialog()
+            }
+        }
+        (binding.spinnerCategory.editText as AutoCompleteTextView).setOnClickListener {
+            if (viewmodel.divisionNames.isNotEmpty())
+            {
+                openDivisionSelectionDialog()
+            }
+        }
+    }
+
+    private fun openDivisionSelectionDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(R.string.select_division)
+        builder.setCancelable(false)
+        builder.setMultiChoiceItems(viewmodel.divisionNames.toTypedArray(), viewmodel.selectedDivisionData
+        ) { _, index, isSelected ->
+
+            if (isSelected) {
+                viewmodel.addDivision(index)
+            } else {
+                viewmodel.removeDivision(index)
+            }
+
+        }
+        builder.setPositiveButton(R.string.btn_text_ok
+        ) { _, _ ->
+            viewmodel.showDivisionSelection()
+        }
+        builder.setNegativeButton(R.string.btn_text_cancel
+        ) { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.setNeutralButton(R.string.btn_text_clear_all
+        ) { _, _ -> viewmodel.clearDivisionSelection() }
+
+        builder.show()
+    }
+
+    private fun openCitySelectionDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(R.string.select_city)
+        builder.setCancelable(false)
+        builder.setMultiChoiceItems(viewmodel.cityNames.toTypedArray(), viewmodel.selectedCityData
+        ) { _, index, isSelected ->
+
+            if (isSelected) {
+                viewmodel.addCity(index)
+            } else {
+                viewmodel.removeCity(index)
+            }
+
+        }
+        builder.setPositiveButton(R.string.btn_text_ok
+        ) { _, _ ->
+            viewmodel.showCitySelection()
+        }
+        builder.setNegativeButton(R.string.btn_text_cancel
+        ) { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.setNeutralButton(R.string.btn_text_clear_all
+        ) { _, _ -> viewmodel.clearCitySelection() }
+
+        builder.show()
     }
 
     private fun updateList(data: List<DoctorDashboardTxData>?) {
         data?.let {
-            Log.d(TAG, "updateList: $it")
             adapter.submitList(it)
         }
     }
 
     private fun setUI() {
         binding.dashboardRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.dashboardRecyclerView.setHasFixedSize(true)
+        binding.dashboardRecyclerView.isNestedScrollingEnabled = false
         adapter = GenericAdapter(this,R.layout.transaction_card)
         binding.dashboardRecyclerView.adapter = adapter
     }
 
-    private fun setupCitySpinner(cityList: List<MdrCity>) {
-        val adapter = ArrayAdapter(requireContext(), androidx.transition.R.layout.support_simple_spinner_dropdown_item, cityList.map { it.cityName })
-        (binding.spinnerCity.editText as? AutoCompleteTextView)?.setAdapter(adapter)
-        (binding.spinnerCity.editText as AutoCompleteTextView).onItemClickListener =
-            AdapterView.OnItemClickListener { p0, p1, p2, p3 ->  }
-    }
+
 
     private fun observeUiEvents() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -109,8 +170,17 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
                 {
                     doctorDashboardEvents.addNewCollectionClicked -> navigateToNewCollectionFragment()
                     doctorDashboardEvents.addNewServiceClicked -> navigateToNewServiceFragment()
+                    doctorDashboardEvents.showDateRangePicker -> openDateRangePicker()
                 }
             }
+        }
+    }
+
+    private fun openDateRangePicker() {
+        val picker = PickerUtils.getDateRangePicker()
+        picker.show(requireActivity().supportFragmentManager,"date range picker")
+        picker.addOnPositiveButtonClickListener { dateRange ->
+            viewmodel.updateDateRange(dateRange)
         }
     }
 
