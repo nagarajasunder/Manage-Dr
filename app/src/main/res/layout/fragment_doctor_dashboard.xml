@@ -180,7 +180,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:background="?android:attr/selectableItemBackground"
                     tools:ignore="RtlCompat" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -300,7 +300,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/dashboard_recycler_view"

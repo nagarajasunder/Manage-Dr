@@ -1,24 +1,27 @@
 package com.geekydroid.managedr.ui.add_doctor.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.geekydroid.managedr.R
-import com.geekydroid.managedr.utils.UiOnClickListener
 import com.geekydroid.managedr.adapter.GenericAdapter
 import com.geekydroid.managedr.application.ScreenData
 import com.geekydroid.managedr.databinding.FragmentHomeBinding
 import com.geekydroid.managedr.providers.Resource
 import com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData
+import com.geekydroid.managedr.ui.add_doctor.model.SortPreferences
 import com.geekydroid.managedr.ui.add_doctor.viewmodel.HomeFragmentEvents
 import com.geekydroid.managedr.ui.add_doctor.viewmodel.HomeFragmentViewModel
-import com.geekydroid.managedr.ui.doctordashboard.model.DoctorDashboardTxData
+import com.geekydroid.managedr.utils.UiOnClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "HomeFragment"
@@ -28,6 +31,7 @@ class HomeFragment : Fragment(),UiOnClickListener {
     private lateinit var binding: FragmentHomeBinding
     private val viewmodel:HomeFragmentViewModel by viewModels()
     private lateinit var adapter:GenericAdapter
+    private lateinit var host:FragmentActivity
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,16 +45,9 @@ class HomeFragment : Fragment(),UiOnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
+        host = requireActivity()
         setUI()
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewmodel.eventsChannel.collect{ event ->
-                when(event)
-                {
-                    is HomeFragmentEvents.addNewDoctorFabClicked -> navigateToAddNewDoctorScreen()
-                    is HomeFragmentEvents.navigateToDoctorDashboard -> navigateToDoctorDashboard(event.doctorId)
-                }
-            }
-        }
+        observeUiEvents()
 
         viewmodel.doctorData.observe(viewLifecycleOwner){ resource ->
 
@@ -68,6 +65,18 @@ class HomeFragment : Fragment(),UiOnClickListener {
         }
     }
 
+    private fun observeUiEvents() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewmodel.eventsChannel.collect{ event ->
+                when(event)
+                {
+                    is HomeFragmentEvents.addNewDoctorFabClicked -> navigateToAddNewDoctorScreen()
+                    is HomeFragmentEvents.navigateToDoctorDashboard -> navigateToDoctorDashboard(event.doctorId)
+                }
+            }
+        }
+    }
+
     private fun navigateToDoctorDashboard(doctorId:Int) {
         val action = HomeFragmentDirections.actionHomeFragmentToDoctorDashboardFragment(doctorId)
         findNavController().navigate(action)
@@ -78,6 +87,35 @@ class HomeFragment : Fragment(),UiOnClickListener {
         binding.recyclerView.setHasFixedSize(true)
         adapter = GenericAdapter(this,R.layout.doctor_card)
         binding.recyclerView.adapter = adapter
+
+        host.addMenuProvider(object : MenuProvider{
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.home_screen_menu,menu)
+                val searchItem = menu.findItem(R.id.search).actionView as SearchView
+                searchItem.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        return false
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        viewmodel.updateSearchText(newText?:"")
+                        return true
+                    }
+
+                })
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.sort_name_asc -> viewmodel.updateSortOrder(SortPreferences.SORT_BY_NAME_ASC)
+                    R.id.sort_name_desc -> viewmodel.updateSortOrder(SortPreferences.SORT_BY_NAME_DESC)
+                    R.id.newest_first -> viewmodel.updateSortOrder(SortPreferences.NEWEST_FIRST)
+                    R.id.oldest_first -> viewmodel.updateSortOrder(SortPreferences.OLDEST_FIRST)
+                }
+                return true
+            }
+
+        },viewLifecycleOwner,Lifecycle.State.RESUMED)
     }
 
     private fun setupAdapter(data:List<HomeScreenDoctorData>? = null) {

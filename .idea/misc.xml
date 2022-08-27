@@ -7,8 +7,10 @@
         <entry key="app/src/main/res/drawable/add_icon.xml" value="0.161" />
         <entry key="app/src/main/res/drawable/calendar_icon.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/doctor_icon.xml" value="0.244" />
+        <entry key="app/src/main/res/drawable/filter.xml" value="0.28" />
         <entry key="app/src/main/res/drawable/phone.xml" value="0.244" />
         <entry key="app/src/main/res/drawable/save_icon.xml" value="0.161" />
+        <entry key="app/src/main/res/drawable/search.xml" value="0.28" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3411458333333333" />
         <entry key="app/src/main/res/layout/add_new_category_dialog.xml" value="0.2986842105263158" />
         <entry key="app/src/main/res/layout/doctor_card.xml" value="0.35520833333333335" />
@@ -18,6 +20,7 @@
         <entry key="app/src/main/res/layout/fragment_new_service.xml" value="0.2995614035087719" />
         <entry key="app/src/main/res/layout/transaction_card.xml" value="0.29912280701754385" />
         <entry key="app/src/main/res/menu/add_new_doctor_menu.xml" value="0.35520833333333335" />
+        <entry key="app/src/main/res/menu/home_screen_menu.xml" value="0.2982456140350877" />
       </map>
     </option>
   </component>
