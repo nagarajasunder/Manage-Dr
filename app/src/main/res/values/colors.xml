@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="light_grey">#DCDCDC</color>
     <color name="dark_mode">#121212</color>
+    <color name="currency_green">#118C4F</color>
+    <color name="currency_red">#cc0202</color>
 </resources>

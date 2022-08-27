@@ -149,7 +149,7 @@ class AddNewServiceFragmentViewmodel @Inject constructor(private val repository:
         viewModelScope.launch {
             val newService = MdrService(
                 servicedDoctorId = doctorId,
-                serviceAmount = transactionAmount.value?.toInt() ?: 0,
+                serviceAmount = transactionAmount.value?.toDouble() ?: 0.0,
                 categoryId = categoryData.value!![selectedCategoryIndex].categoryID,
                 cityId = cityData.value!![selectedCityIndex].cityId,
                 serviceDate = Date(transactionDate),

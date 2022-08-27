@@ -29,7 +29,7 @@ interface ServiceDao {
             "LEFT JOIN MDR_CATEGORY `D` " +
             "ON (`D`.category_id == `S`.category_id) " +
             "LEFT JOIN MDR_CITY `C` " +
-            "ON (`C`.city_id == `S`.city_id) WHERE `S`.serviced_doctor_id = :doctorId")
+            "ON (`C`.city_id == `S`.city_id) WHERE `S`.serviced_doctor_id = :doctorId ORDER BY `S`.created_on DESC")
     fun getTxBasedOnFilters(doctorId:Int):Flow<List<DoctorDashboardTxData>>
 
     @RawQuery(observedEntities = [MdrService::class])

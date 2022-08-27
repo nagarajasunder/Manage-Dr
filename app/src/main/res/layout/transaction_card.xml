@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.geekydroid.managedr.application.TransactionType"/>
+        <import type="androidx.core.content.ContextCompat"/>
         <variable
             name="model"
             type="com.geekydroid.managedr.ui.doctordashboard.model.DoctorDashboardTxData" />
@@ -63,11 +65,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="@{String.valueOf(model.transactionAmount)}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:text="@{model.transactionAmountFormatted}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     app:layout_constraintStart_toEndOf="@+id/tv_city_name"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@{ContextCompat.getColor(context,model.currencyColor)}"
+                    android:textStyle="bold"
                     app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
@@ -81,7 +85,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_division_name"
                     app:layout_constraintStart_toStartOf="parent"
                     style="@style/textViewMediumItalic"
-                    android:text="Aug 25, 2022"/>
+                    android:text="@{model.transactionDateString}"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
