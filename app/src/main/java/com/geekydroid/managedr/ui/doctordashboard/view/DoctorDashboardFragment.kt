@@ -58,8 +58,8 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
         doctorId = args.doctorId
 
         setUI()
-
-        viewmodel.getTransactionData(doctorId)
+        viewmodel.setDoctorId(doctorId)
+        viewmodel.getTransactionData()
         viewmodel.transactionData.observe(viewLifecycleOwner){
             when(it)
             {
@@ -68,7 +68,7 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
                 is Resource.Success -> updateList(it.data)
             }
         }
-        viewmodel.getDoctorDataById(doctorId)
+        viewmodel.getDoctorDataById()
         viewmodel.doctorData.observe(viewLifecycleOwner){
             when(it)
             {
@@ -79,9 +79,10 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
         }
         observeUiEvents()
         (binding.spinnerCity.editText as AutoCompleteTextView).setOnClickListener {
-            if (viewmodel.cityNames.isNotEmpty())
+            val cityNames = viewmodel.getCityNames()
+            if (cityNames.isNotEmpty())
             {
-                openCitySelectionDialog()
+                openCitySelectionDialog(cityNames)
             }
         }
         (binding.spinnerCategory.editText as AutoCompleteTextView).setOnClickListener {
@@ -90,6 +91,14 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
                 openDivisionSelectionDialog()
             }
         }
+        binding.txTypeGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+            viewmodel.updateTxTypeFilter(checkedIds)
+        }
+    }
+
+    private fun clearChipSelection()
+    {
+        binding.txTypeGroup.clearCheck()
     }
 
     private fun openDivisionSelectionDialog() {
@@ -120,11 +129,11 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
         builder.show()
     }
 
-    private fun openCitySelectionDialog() {
+    private fun openCitySelectionDialog(cityNames:List<String>) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(R.string.select_city)
         builder.setCancelable(false)
-        builder.setMultiChoiceItems(viewmodel.cityNames.toTypedArray(), viewmodel.selectedCityData
+        builder.setMultiChoiceItems(cityNames.toTypedArray(), viewmodel.selectedCityData
         ) { _, index, isSelected ->
 
             if (isSelected) {
@@ -171,6 +180,7 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
                     doctorDashboardEvents.addNewCollectionClicked -> navigateToNewCollectionFragment()
                     doctorDashboardEvents.addNewServiceClicked -> navigateToNewServiceFragment()
                     doctorDashboardEvents.showDateRangePicker -> openDateRangePicker()
+                    doctorDashboardEvents.clearChipSelection -> clearChipSelection()
                 }
             }
         }

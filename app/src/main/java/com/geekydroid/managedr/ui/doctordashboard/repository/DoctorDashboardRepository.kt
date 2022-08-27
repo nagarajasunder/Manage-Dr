@@ -1,6 +1,7 @@
 package com.geekydroid.managedr.ui.doctordashboard.repository
 
 
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.geekydroid.managedr.di.ApplicationScope
 import com.geekydroid.managedr.di.IoDispatcher
 import com.geekydroid.managedr.ui.add_doctor.dao.doctorDao
@@ -30,5 +31,6 @@ class DoctorDashboardRepository @Inject constructor(
     fun getAllCities() = cityDao.getAllCities()
     fun getTransactionDataBasedOnFilters(doctorId: Int) = serviceDao.getTxBasedOnFilters(doctorId)
     fun getAllCategories() = categoryDao.getAllCategories()
+    fun getDoctorDatax(query: SupportSQLiteQuery) = serviceDao.temp(query)
 
 }

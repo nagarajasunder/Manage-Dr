@@ -4,7 +4,10 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
+import androidx.room.RawQuery
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.geekydroid.managedr.ui.addnewservice.model.MdrService
+import com.geekydroid.managedr.ui.doctordashboard.model.DashboardFilters
 import com.geekydroid.managedr.ui.doctordashboard.model.DoctorDashboardTxData
 import kotlinx.coroutines.flow.Flow
 
@@ -28,4 +31,7 @@ interface ServiceDao {
             "LEFT JOIN MDR_CITY `C` " +
             "ON (`C`.city_id == `S`.city_id) WHERE `S`.serviced_doctor_id = :doctorId")
     fun getTxBasedOnFilters(doctorId:Int):Flow<List<DoctorDashboardTxData>>
+
+    @RawQuery(observedEntities = [MdrService::class])
+    fun temp(query: SupportSQLiteQuery):Flow<List<DoctorDashboardTxData>>
 }
