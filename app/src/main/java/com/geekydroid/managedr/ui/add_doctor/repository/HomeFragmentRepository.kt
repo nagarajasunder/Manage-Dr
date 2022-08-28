@@ -10,5 +10,5 @@ import javax.inject.Inject
 @ActivityRetainedScoped
 class HomeFragmentRepository @Inject constructor(private val dao:doctorDao) {
 
-    fun getDoctorData(searchText:String = "",preferences: SortPreferences): Flow<List<HomeScreenDoctorData>> = dao.getDoctorDataBasedOnFilters(searchText,preferences)
+    fun getDoctorData(searchText:String = "",preferences: String): Flow<List<HomeScreenDoctorData>> = dao.getDoctorDataBasedOnFilters(searchText,preferences)
 }

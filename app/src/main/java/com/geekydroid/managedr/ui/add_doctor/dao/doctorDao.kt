@@ -16,12 +16,13 @@ interface doctorDao {
 
     fun getDoctorDataBasedOnFilters(
         searchText: String,
-        sortPreferences: SortPreferences,
+        sortPreferences: String,
     ): Flow<List<HomeScreenDoctorData>> = when (sortPreferences) {
-        SortPreferences.SORT_BY_NAME_ASC -> getDoctorDataSortByNameAsc(searchText)
-        SortPreferences.SORT_BY_NAME_DESC -> getDoctorDataSortByNameDesc(searchText)
-        SortPreferences.NEWEST_FIRST -> getDoctorDataNewestFirst(searchText)
-        SortPreferences.OLDEST_FIRST -> getDoctorDataOldestFirst(searchText)
+        SortPreferences.SORT_BY_NAME_ASC.name -> getDoctorDataSortByNameAsc(searchText)
+        SortPreferences.SORT_BY_NAME_DESC.name -> getDoctorDataSortByNameDesc(searchText)
+        SortPreferences.NEWEST_FIRST.name -> getDoctorDataNewestFirst(searchText)
+        SortPreferences.OLDEST_FIRST.name -> getDoctorDataOldestFirst(searchText)
+        else -> getDoctorDataNewestFirst(searchText)
     }
 
 

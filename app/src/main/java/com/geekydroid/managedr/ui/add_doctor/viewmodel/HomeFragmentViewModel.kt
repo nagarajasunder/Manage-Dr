@@ -4,25 +4,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.geekydroid.managedr.application.PreferencesManager
 import com.geekydroid.managedr.providers.Resource
 import com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData
 import com.geekydroid.managedr.ui.add_doctor.model.SortPreferences
 import com.geekydroid.managedr.ui.add_doctor.repository.HomeFragmentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeFragmentViewModel @Inject constructor(private val repository: HomeFragmentRepository) :
+class HomeFragmentViewModel @Inject constructor(private val repository: HomeFragmentRepository,private val preferencesManager: PreferencesManager) :
     ViewModel() {
 
     private val searchText:MutableStateFlow<String> = MutableStateFlow("")
-    private val sortOrder:MutableStateFlow<SortPreferences> = MutableStateFlow(SortPreferences.NEWEST_FIRST)
+    private val sortOrder:Flow<String> = preferencesManager.sortPreference
     private var _doctorData: MutableLiveData<Resource<List<HomeScreenDoctorData>>> = MutableLiveData(Resource.Loading())
     val doctorData:LiveData<Resource<List<HomeScreenDoctorData>>> = _doctorData
 
@@ -60,7 +58,9 @@ class HomeFragmentViewModel @Inject constructor(private val repository: HomeFrag
 
     fun updateSortOrder(order:SortPreferences)
     {
-        sortOrder.value = order
+        viewModelScope.launch {
+            preferencesManager.updateSortPreferences(order)
+        }
     }
 
 
