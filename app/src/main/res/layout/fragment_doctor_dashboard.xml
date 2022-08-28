@@ -153,7 +153,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_service"
-            app:layout_constraintBottom_toTopOf="@+id/dashboard_recycler_view"
+            app:layout_constraintBottom_toTopOf="@+id/divider_top"
             android:layout_marginTop="16dp"
             style="@style/cardItem"
             android:clickable="false"
@@ -198,6 +198,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="none"
+                        android:hint="@string/hint_division"
                         android:text="@{viewmodel.divisionFilterText}"
                         />
 
@@ -218,6 +219,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="none"
+                        android:hint="@string/hint_city"
                         android:text="@{viewmodel.cityFilterText}"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -301,16 +303,76 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            app:dividerColor="?android:textColorPrimary"
+            app:layout_constraintTop_toBottomOf="@+id/filter_card"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/total_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider_top">
+
+            <TextView
+                android:id="@+id/tv_service_total"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{String.format(@string/total_service,viewmodel.totalAmountPair.first)}"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_return_total"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:inputType="textMultiLine"
+                style="@style/textViewRegular"
+                android:textColor="@color/currency_red"
+                tools:ignore="TextViewEdits" />
+
+            <TextView
+                android:id="@+id/tv_return_total"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{String.format(@string/total_return,viewmodel.totalAmountPair.second)}"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp"
+                android:inputType="textMultiLine"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/tv_service_total"
+                style="@style/textViewRegular"
+                android:textColor="@color/currency_green"
+                tools:ignore="TextViewEdits" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            app:dividerColor="?android:textColorPrimary"
+            app:layout_constraintTop_toBottomOf="@+id/total_layout"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/dashboard_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:overScrollMode="never"
             android:padding="8dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/filter_card"/>
-
+            app:layout_constraintTop_toBottomOf="@+id/divider_bottom" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

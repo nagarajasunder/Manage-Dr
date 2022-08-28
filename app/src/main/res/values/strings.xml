@@ -51,4 +51,7 @@
     <string name="sort_asc">Sort by Name (A - Z)</string>
     <string name="sort_desc">Sort by Name (Z - A)</string>
     <string name="hint_sort">Sort</string>
+    <string name="hint_expand">Expand/Collapse</string>
+    <string name="total_service">Total Service\n %1s</string>
+    <string name="total_return">Total Return\n %1s</string>
 </resources>

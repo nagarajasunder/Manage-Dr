@@ -6,7 +6,9 @@
         <entry key="../../../../layout/custom_preview.xml" value="0.2803442028985507" />
         <entry key="app/src/main/res/drawable/add_icon.xml" value="0.161" />
         <entry key="app/src/main/res/drawable/calendar_icon.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/clear.xml" value="0.1865" />
         <entry key="app/src/main/res/drawable/doctor_icon.xml" value="0.244" />
+        <entry key="app/src/main/res/drawable/expand.xml" value="0.1865" />
         <entry key="app/src/main/res/drawable/filter.xml" value="0.28" />
         <entry key="app/src/main/res/drawable/phone.xml" value="0.244" />
         <entry key="app/src/main/res/drawable/save_icon.xml" value="0.161" />

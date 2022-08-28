@@ -16,6 +16,7 @@ import com.geekydroid.managedr.ui.addnewservice.model.MdrCity
 import com.geekydroid.managedr.ui.doctordashboard.model.DoctorDashboardTxData
 import com.geekydroid.managedr.ui.doctordashboard.repository.DoctorDashboardRepository
 import com.geekydroid.managedr.utils.DateUtils
+import com.geekydroid.managedr.utils.TextUtils
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -57,6 +58,9 @@ class DoctorDashboardViewmodel @Inject constructor(private val repository: Docto
         setDefaultDateRange()
     }
 
+    private val _totalAmountPair:MutableLiveData<Pair<String,String>> = MutableLiveData(Pair(TextUtils.getCurrencyFormat(0.0),TextUtils.getCurrencyFormat(0.0)))
+    val totalAmountPair:LiveData<Pair<String,String>> = _totalAmountPair
+
     private val baseQuery:String = "SELECT `S`.service_id as transactionId, " +
             "`S`.transaction_type as transactionType, " +
             "`S`.service_date as transactionDate, " +
@@ -88,6 +92,16 @@ class DoctorDashboardViewmodel @Inject constructor(private val repository: Docto
         _transactionData.postValue(Resource.Loading())
         repository.getTransactionDataBasedOnFilters(doctorID).collect {
             _transactionData.postValue(Resource.Success(it))
+            calculateTotalValue(it)
+        }
+    }
+
+    private fun calculateTotalValue(data: List<DoctorDashboardTxData>) {
+        if (data.isNotEmpty())
+        {
+            val serivceTotalStr = TextUtils.getCurrencyFormat(data.filter { it.transactionType == TransactionType.SERVICE.name }.sumOf { it.transactionAmount })
+            val returnTotalStr = TextUtils.getCurrencyFormat(data.filter { it.transactionType == TransactionType.COLLECTION.name }.sumOf { it.transactionAmount })
+            _totalAmountPair.value = Pair(serivceTotalStr,returnTotalStr)
         }
     }
 
@@ -218,11 +232,10 @@ class DoctorDashboardViewmodel @Inject constructor(private val repository: Docto
     {
         viewModelScope.launch {
             val query = constructQuery(doctorId)
-            Log.d(TAG, "getTransactionDatex: $query")
             repository.getDoctorDatax(SimpleSQLiteQuery(query))
                 .collect{
-                    Log.d(TAG, "getTransactionDataWithFilters: $it")
                     _transactionData.postValue(Resource.Success(it))
+                    calculateTotalValue(it)
             }
         }
     }
