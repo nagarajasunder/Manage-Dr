@@ -181,9 +181,16 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
                     doctorDashboardEvents.addNewServiceClicked -> navigateToNewServiceFragment()
                     doctorDashboardEvents.showDateRangePicker -> openDateRangePicker()
                     doctorDashboardEvents.clearChipSelection -> clearChipSelection()
+                    doctorDashboardEvents.navigateToEditDoctorScreen -> openEditDoctorScreen()
                 }
             }
         }
+    }
+
+    private fun openEditDoctorScreen() {
+        val action = DoctorDashboardFragmentDirections.actionDoctorDashboardFragmentToAddNewDoctorFragment()
+        action.doctorId = doctorId
+        findNavController().navigate(action)
     }
 
     private fun openDateRangePicker() {
@@ -200,6 +207,7 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
     }
 
     private fun navigateToNewServiceFragment() {
+        View.GONE
         val action = DoctorDashboardFragmentDirections.actionDoctorDashboardFragmentToNewServiceFragment(doctorId,TransactionType.SERVICE)
         findNavController().navigate(action)
     }

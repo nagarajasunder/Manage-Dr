@@ -10,7 +10,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.geekydroid.managedr.R
 import com.geekydroid.managedr.databinding.FragmentAddNewDoctorBinding
 import com.geekydroid.managedr.ui.add_doctor.viewmodel.AddNewDoctorEvents
@@ -25,6 +27,7 @@ class AddNewDoctorFragment : Fragment() {
     private lateinit var binding: FragmentAddNewDoctorBinding
     private val viewmodel: AddNewDoctorViewModel by viewModels()
     private lateinit var host: FragmentActivity
+    private val args:AddNewDoctorFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +45,7 @@ class AddNewDoctorFragment : Fragment() {
         binding.viewmodel = viewmodel
         binding.lifecycleOwner = viewLifecycleOwner
         host = requireActivity()
+        viewmodel.updateExistingDoctorId(args.doctorId)
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewmodel.AddNewDoctorEvent.collect { event ->
                 when (event) {
@@ -55,6 +59,7 @@ class AddNewDoctorFragment : Fragment() {
                         DateInputType.DATE_OF_BIRTH)
                     AddNewDoctorEvents.OpenWeddingPicker -> openDatePicker("Select Wedding Date",
                         DateInputType.WEDDING_ANNIVERSARY_DATE)
+                    AddNewDoctorEvents.DoctorUpdatedSuccessfully -> moveToHomeScreen()
                 }
             }
         }

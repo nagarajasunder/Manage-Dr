@@ -132,6 +132,10 @@ class DoctorDashboardViewmodel @Inject constructor(private val repository: Docto
         }
     }
 
+    fun doctorInfoCardClicked() = viewModelScope.launch {
+        doctorDashboardEventsChannel.send(doctorDashboardEvents.navigateToEditDoctorScreen)
+    }
+
     fun AddNewServiceOnClick() = viewModelScope.launch {
         doctorDashboardEventsChannel.send(doctorDashboardEvents.addNewServiceClicked)
     }
@@ -336,4 +340,5 @@ sealed class doctorDashboardEvents {
     object addNewCollectionClicked : doctorDashboardEvents()
     object showDateRangePicker : doctorDashboardEvents()
     object clearChipSelection: doctorDashboardEvents()
+    object navigateToEditDoctorScreen : doctorDashboardEvents()
 }

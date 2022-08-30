@@ -22,4 +22,7 @@ class DoctorRepository @Inject constructor(
         dao.insertNewDoctor(mdrDoctor)
     }.join()
 
+    fun getDoctorById(doctorId: Int) = dao.getDoctorById(doctorId)
+    suspend fun updateDoctor(doctor: MdrDoctor) = dao.updateDoctor(doctor)
+
 }

@@ -54,4 +54,5 @@
     <string name="hint_expand">Expand/Collapse</string>
     <string name="total_service">Total Service\n %1s</string>
     <string name="total_return">Total Return\n %1s</string>
+    <string name="hint_birthday_date">birthday date</string>
 </resources>

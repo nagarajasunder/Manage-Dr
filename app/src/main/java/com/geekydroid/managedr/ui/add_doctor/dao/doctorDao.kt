@@ -3,6 +3,7 @@ package com.geekydroid.managedr.ui.add_doctor.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData
 import com.geekydroid.managedr.ui.add_doctor.model.MdrDoctor
 import com.geekydroid.managedr.ui.add_doctor.model.SortPreferences
@@ -32,6 +33,8 @@ interface doctorDao {
                 "doctor_name as doctorName, " +
                 "hospital_name as hospitalName, " +
                 "doctor_mobile_number as doctorMobileNumber, " +
+                "date_of_birth as doctorDateOfBirth, " +
+                "wedding_anniversary_date as doctorWeddingDate, "+
                 "created_on as createdOn, " +
                 "updated_on as updatedOn FROM MDR_DOCTOR WHERE doctorName LIKE '%' || :searchText || '%'"
     )
@@ -42,6 +45,8 @@ interface doctorDao {
                 "doctor_name as doctorName, " +
                 "hospital_name as hospitalName, " +
                 "doctor_mobile_number as doctorMobileNumber, " +
+                "date_of_birth as doctorDateOfBirth, " +
+                "wedding_anniversary_date as doctorWeddingDate, "+
                 "created_on as createdOn, " +
                 "updated_on as updatedOn FROM MDR_DOCTOR WHERE doctorName LIKE '%' || :searchText || '%' ORDER BY doctorName ASC"
     )
@@ -52,6 +57,8 @@ interface doctorDao {
                 "doctor_name as doctorName, " +
                 "hospital_name as hospitalName, " +
                 "doctor_mobile_number as doctorMobileNumber, " +
+                "date_of_birth as doctorDateOfBirth, " +
+                "wedding_anniversary_date as doctorWeddingDate, "+
                 "created_on as createdOn, " +
                 "updated_on as updatedOn FROM MDR_DOCTOR WHERE doctorName LIKE '%' || :searchText || '%' ORDER BY doctorName DESC"
     )
@@ -63,6 +70,8 @@ interface doctorDao {
                 "doctor_name as doctorName, " +
                 "hospital_name as hospitalName, " +
                 "doctor_mobile_number as doctorMobileNumber, " +
+                "date_of_birth as doctorDateOfBirth, " +
+                "wedding_anniversary_date as doctorWeddingDate, "+
                 "created_on as createdOn, " +
                 "updated_on as updatedOn FROM MDR_DOCTOR WHERE doctorName LIKE '%' || :searchText || '%' ORDER BY createdOn DESC"
     )
@@ -73,6 +82,8 @@ interface doctorDao {
                 "doctor_name as doctorName, " +
                 "hospital_name as hospitalName, " +
                 "doctor_mobile_number as doctorMobileNumber, " +
+                "date_of_birth as doctorDateOfBirth, " +
+                "wedding_anniversary_date as doctorWeddingDate, "+
                 "created_on as createdOn, " +
                 "updated_on as updatedOn FROM MDR_DOCTOR WHERE doctorName LIKE '%' || :searchText || '%' ORDER BY createdOn ASC"
     )
@@ -84,6 +95,8 @@ interface doctorDao {
                 "doctor_name as doctorName, " +
                 "hospital_name as hospitalName, " +
                 "doctor_mobile_number as doctorMobileNumber, " +
+                "date_of_birth as doctorDateOfBirth, " +
+                "wedding_anniversary_date as doctorWeddingDate, "+
                 "created_on as createdOn, " +
                 "updated_on as updatedOn FROM MDR_DOCTOR WHERE doctor_id = :doctorId"
     )
@@ -91,6 +104,12 @@ interface doctorDao {
 
     @Query("SELECT doctor_name FROM MDR_DOCTOR WHERE doctor_id = :doctorId")
     fun getDoctorName(doctorId: Int): Flow<String>
+
+    @Query("SELECT * FROM MDR_DOCTOR WHERE doctor_id = :doctorId")
+    fun getDoctorById(doctorId: Int): Flow<MdrDoctor>
+
+    @Update
+    suspend fun updateDoctor(doctor: MdrDoctor)
 
 
 }

@@ -10,6 +10,7 @@ import com.geekydroid.managedr.utils.DateUtils
 import com.geekydroid.managedr.utils.TextUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,6 +19,8 @@ import javax.inject.Inject
 class AddNewDoctorViewModel @Inject constructor(private val repository: DoctorRepository) :
     ViewModel() {
 
+    private var existingDoctorId: Int = -1
+    private var existingDoctor: MdrDoctor? = null
     private val AddNewDoctorEventsChannel = Channel<AddNewDoctorEvents>()
     val AddNewDoctorEvent = AddNewDoctorEventsChannel.receiveAsFlow()
 
@@ -25,9 +28,44 @@ class AddNewDoctorViewModel @Inject constructor(private val repository: DoctorRe
     val hospitalName = MutableLiveData("")
     val mobileNumber = MutableLiveData("")
     var dateOfBirth = MutableLiveData("")
-    private var dateOfBirthLong:Long = 0L
+    private var dateOfBirthLong: Long = 0L
     var weddingAnniversaryDate = MutableLiveData("")
-    private var weddingAnniversaryDateLong:Long = 0L
+    private var weddingAnniversaryDateLong: Long = 0L
+
+    fun updateExistingDoctorId(doctorId:Int)
+    {
+        existingDoctorId = doctorId
+        if (doctorId != -1)
+        {
+            getDoctorDetails()
+        }
+    }
+
+    fun getDoctorDetails() {
+        viewModelScope.launch {
+            repository.getDoctorById(existingDoctorId).first().let {
+                existingDoctor = it
+                prefillDoctorDetails()
+            }
+        }
+    }
+
+    private fun prefillDoctorDetails() {
+        existingDoctor?.let { doctor ->
+            doctorName.postValue(doctor.doctorName)
+            hospitalName.postValue(doctor.hospitalName)
+            mobileNumber.postValue(doctor.doctorMobileNumber)
+            dateOfBirthLong = doctor.dateOfBirth?.time ?: 0L
+            dateOfBirth.postValue(if (dateOfBirthLong == 0L) "" else DateUtils.fromLongToDateString(
+                dateOfBirthLong,
+                DateFormatProvider.DATE_FORMAT_MMM_DD_YYYY))
+            weddingAnniversaryDateLong = doctor.weddingAnniversaryDate?.time ?: 0L
+            weddingAnniversaryDate.postValue(if (weddingAnniversaryDateLong == 0L) "" else DateUtils.fromLongToDateString(
+                weddingAnniversaryDateLong,
+                DateFormatProvider.DATE_FORMAT_MMM_DD_YYYY))
+
+        }
+    }
 
     fun onSaveCtaClicked() = viewModelScope.launch {
         AddNewDoctorEventsChannel.send(AddNewDoctorEvents.SaveNewDoctor)
@@ -43,9 +81,28 @@ class AddNewDoctorViewModel @Inject constructor(private val repository: DoctorRe
         ) {
             AddNewDoctorEventsChannel.send(AddNewDoctorEvents.EnterValidMobileNumber)
         } else {
-            saveNewDoctor()
-            AddNewDoctorEventsChannel.send(AddNewDoctorEvents.DoctorSavedSuccessFully)
+            if (existingDoctorId == -1) {
+                saveNewDoctor()
+                AddNewDoctorEventsChannel.send(AddNewDoctorEvents.DoctorSavedSuccessFully)
+            } else {
+                updateDoctor()
+                AddNewDoctorEventsChannel.send(AddNewDoctorEvents.DoctorUpdatedSuccessfully)
+            }
         }
+    }
+
+    private suspend fun updateDoctor() {
+        existingDoctor?.let { doctor ->
+                doctor.copy(
+                    doctorName = TextUtils.trimText(doctorName.value ?: ""),
+                    dateOfBirth = DateUtils.fromLongToDate(dateOfBirthLong),
+                    weddingAnniversaryDate = DateUtils.fromLongToDate(weddingAnniversaryDateLong),
+                    doctorMobileNumber = TextUtils.trimText(mobileNumber.value ?: ""),
+                    hospitalName = TextUtils.trimText(hospitalName.value ?: ""),
+                    updatedOn = System.currentTimeMillis()
+                )
+                repository.updateDoctor(doctor)
+            }
     }
 
     private suspend fun saveNewDoctor() {
@@ -87,4 +144,5 @@ sealed class AddNewDoctorEvents {
     object EnterValidMobileNumber : AddNewDoctorEvents()
     object OpenDobPicker : AddNewDoctorEvents()
     object OpenWeddingPicker : AddNewDoctorEvents()
+    object DoctorUpdatedSuccessfully : AddNewDoctorEvents()
 }
