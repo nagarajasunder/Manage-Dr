@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="com.geekydroid.managedr.ui.add_doctor.viewmodel.AddNewDoctorViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        tools:context=".ui.add_doctor.fragment.AddNewDoctorFragment">
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/textHeadingStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="8dp"
+            android:text="@string/content_desc_add_new_doctor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ed_doctor_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/hint_enter_the_doctor_name"
+            app:counterEnabled="true"
+            app:counterMaxLength="20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/inputLayoutStyle"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/inputFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@={viewmodel.doctorName}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ed_hospital_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="@string/hint_enter_the_hospital_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/inputLayoutStyle"
+            app:layout_constraintTop_toBottomOf="@+id/ed_doctor_name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/inputFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@={viewmodel.hospitalName}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ed_mobile_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="@string/hint_enter_the_mobile_number"
+            app:counterEnabled="true"
+            app:counterMaxLength="15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/inputLayoutStyle"
+            app:layout_constraintTop_toBottomOf="@+id/ed_hospital_name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/inputFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:singleLine="true"
+                android:text="@={viewmodel.mobileNumber}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_date_of_birth"
+            style="@style/textViewRegular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:minHeight="48dp"
+            android:onClick="@{() -> viewmodel.dobClicked()}"
+            android:text="@{@string/date_of_birth(viewmodel.dateOfBirth)}"
+            app:layout_constraintEnd_toStartOf="@+id/iv_date_of_birth"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ed_mobile_number" />
+
+        <ImageView
+            android:id="@+id/iv_date_of_birth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/date_of_birth"
+            android:focusable="true"
+            android:onClick="@{() -> viewmodel.dobClicked()}"
+            android:src="@drawable/calendar_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_date_of_birth"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_date_of_birth"
+            app:layout_constraintTop_toTopOf="@+id/tv_date_of_birth" />
+
+        <TextView
+            android:id="@+id/tv_wedding_anniversary_date"
+            style="@style/textViewRegular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:minHeight="48dp"
+            android:onClick="@{() -> viewmodel.weddingDateClicked()}"
+            android:text="@{@string/wedding_anniversary_date(viewmodel.weddingAnniversaryDate)}"
+            app:layout_constraintEnd_toStartOf="@+id/iv_wedding_anniversary_date"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date_of_birth" />
+
+        <ImageView
+            android:id="@+id/iv_wedding_anniversary_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@string/date_of_birth"
+            android:src="@drawable/calendar_icon"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{() -> viewmodel.weddingDateClicked()}"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_wedding_anniversary_date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_wedding_anniversary_date"
+            app:layout_constraintTop_toTopOf="@+id/tv_wedding_anniversary_date" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

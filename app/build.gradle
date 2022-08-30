@@ -11,7 +11,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.example.managedr"
+        applicationId "com.geekydroid.managedr"
         minSdk 21
         targetSdk 32
         versionCode 1
@@ -59,7 +59,9 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     testImplementation "androidx.room:room-testing:$room_version"
-    implementation "androidx.room:room-paging:2.5.0-alpha02"
+    implementation "androidx.room:room-paging:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -93,6 +95,9 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:2.41"
     implementation 'com.google.dagger:dagger-android-support:2.41'
 
+    //Datastore preferences
+    implementation "androidx.datastore:datastore:1.0.0"
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 
 
 

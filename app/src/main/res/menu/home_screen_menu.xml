@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/sort_filters"
+        android:icon="@drawable/filter"
+        android:title="@string/hint_sort"
+        app:showAsAction="ifRoom">
+        <menu>
+            <group android:menuCategory="container">
+                <item
+                    android:id="@+id/newest_first"
+                    android:title="@string/hint_newest_first" />
+                <item
+                    android:id="@+id/oldest_first"
+                    android:title="@string/hint_oldest_first" />
+                <item
+                    android:id="@+id/sort_name_asc"
+                    android:title="@string/sort_asc" />
+                <item
+                    android:id="@+id/sort_name_desc"
+                    android:title="@string/sort_desc" />
+            </group>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/search"
+        android:title="@string/hint_search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
+
+</menu>

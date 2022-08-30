@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.geekydroid.managedr.ui.add_doctor.fragment.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_addNewDoctorFragment"
+            app:destination="@id/addNewDoctorFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_doctorDashboardFragment"
+            app:destination="@id/doctorDashboardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addNewDoctorFragment"
+        android:name="com.geekydroid.managedr.ui.add_doctor.fragment.AddNewDoctorFragment"
+        android:label="AddNewDoctorFragment" />
+    <fragment
+        android:id="@+id/doctorDashboardFragment"
+        android:name="com.geekydroid.managedr.ui.doctordashboard.view.DoctorDashboardFragment"
+        android:label="DoctorDashboardFragment" >
+        <argument
+            android:name="doctor_id"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_doctorDashboardFragment_to_newServiceFragment"
+            app:destination="@id/newServiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newServiceFragment"
+        android:name="com.geekydroid.managedr.ui.addnewservice.ui.NewServiceFragment"
+        android:label="NewServiceFragment" >
+        <argument
+            android:name="doctorId"
+            app:argType="integer" />
+        <argument
+            android:name="transactionType"
+            app:argType="com.geekydroid.managedr.application.TransactionType" />
+    </fragment>
+</navigation>
