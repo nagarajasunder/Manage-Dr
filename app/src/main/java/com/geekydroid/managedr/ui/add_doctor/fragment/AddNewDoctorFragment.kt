@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.geekydroid.managedr.R
@@ -19,6 +18,8 @@ import com.geekydroid.managedr.ui.add_doctor.viewmodel.AddNewDoctorEvents
 import com.geekydroid.managedr.ui.add_doctor.viewmodel.AddNewDoctorViewModel
 import com.geekydroid.managedr.utils.DateUtils
 import com.geekydroid.managedr.utils.uiutils.PickerUtils
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,14 +53,20 @@ class AddNewDoctorFragment : Fragment() {
                     AddNewDoctorEvents.SaveNewDoctor -> viewmodel.validateAndSaveNewDoctor()
                     AddNewDoctorEvents.EnterDoctorName -> binding.edDoctorName.error =
                         "Please enter a valid doctor name"
-                    AddNewDoctorEvents.DoctorSavedSuccessFully -> moveToHomeScreen()
+                    AddNewDoctorEvents.DoctorSavedSuccessFully -> {
+                        showSnackBar("New doctor added successfully")
+                        moveToHomeScreen()
+                    }
                     AddNewDoctorEvents.EnterValidMobileNumber -> binding.edMobileNumber.error =
                         "Please enter a valid mobile number"
                     AddNewDoctorEvents.OpenDobPicker -> openDatePicker("Select Date of birth",
                         DateInputType.DATE_OF_BIRTH)
                     AddNewDoctorEvents.OpenWeddingPicker -> openDatePicker("Select Wedding Date",
                         DateInputType.WEDDING_ANNIVERSARY_DATE)
-                    AddNewDoctorEvents.DoctorUpdatedSuccessfully -> moveToHomeScreen()
+                    AddNewDoctorEvents.DoctorUpdatedSuccessfully -> {
+                        showSnackBar("Doctor updated successfully")
+                        moveToHomeScreen()
+                    }
                 }
             }
         }
@@ -81,7 +88,11 @@ class AddNewDoctorFragment : Fragment() {
     }
 
     private fun openDatePicker(header: String, inputType: DateInputType) {
-        val datePicker = PickerUtils.getDatePicker(header)
+        val constraintsBuilder = CalendarConstraints.Builder()
+            .setValidator(DateValidatorPointBackward.now())
+        val datePicker =
+            PickerUtils.getDatePicker(header).setCalendarConstraints(constraintsBuilder.build())
+                .build()
         datePicker.addOnPositiveButtonClickListener {
             Log.d("addNewDoctor", "openDatePicker: clicked $inputType ${DateUtils.fromLongToDateString(it)}")
             when (inputType) {
@@ -94,7 +105,6 @@ class AddNewDoctorFragment : Fragment() {
     }
 
     private fun moveToHomeScreen() {
-        showSnackBar("New doctor added successfully")
         findNavController().navigateUp()
     }
 

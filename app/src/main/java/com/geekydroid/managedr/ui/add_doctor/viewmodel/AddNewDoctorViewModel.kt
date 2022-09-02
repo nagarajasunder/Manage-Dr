@@ -21,6 +21,7 @@ class AddNewDoctorViewModel @Inject constructor(private val repository: DoctorRe
 
     private var existingDoctorId: Int = -1
     private var existingDoctor: MdrDoctor? = null
+    private var userEdited:Boolean = false
     private val AddNewDoctorEventsChannel = Channel<AddNewDoctorEvents>()
     val AddNewDoctorEvent = AddNewDoctorEventsChannel.receiveAsFlow()
 
@@ -35,8 +36,9 @@ class AddNewDoctorViewModel @Inject constructor(private val repository: DoctorRe
     fun updateExistingDoctorId(doctorId:Int)
     {
         existingDoctorId = doctorId
-        if (doctorId != -1)
+        if (doctorId != -1 && !userEdited)
         {
+            userEdited = true
             getDoctorDetails()
         }
     }
@@ -93,15 +95,14 @@ class AddNewDoctorViewModel @Inject constructor(private val repository: DoctorRe
 
     private suspend fun updateDoctor() {
         existingDoctor?.let { doctor ->
-                doctor.copy(
-                    doctorName = TextUtils.trimText(doctorName.value ?: ""),
-                    dateOfBirth = DateUtils.fromLongToDate(dateOfBirthLong),
-                    weddingAnniversaryDate = DateUtils.fromLongToDate(weddingAnniversaryDateLong),
-                    doctorMobileNumber = TextUtils.trimText(mobileNumber.value ?: ""),
-                    hospitalName = TextUtils.trimText(hospitalName.value ?: ""),
-                    updatedOn = System.currentTimeMillis()
-                )
-                repository.updateDoctor(doctor)
+            repository.updateDoctor(doctor.copy(
+                doctorName = TextUtils.trimText(doctorName.value ?: ""),
+                dateOfBirth = DateUtils.fromLongToDate(dateOfBirthLong),
+                weddingAnniversaryDate = DateUtils.fromLongToDate(weddingAnniversaryDateLong),
+                doctorMobileNumber = TextUtils.trimText(mobileNumber.value ?: ""),
+                hospitalName = TextUtils.trimText(hospitalName.value ?: ""),
+                updatedOn = System.currentTimeMillis()
+            ))
             }
     }
 

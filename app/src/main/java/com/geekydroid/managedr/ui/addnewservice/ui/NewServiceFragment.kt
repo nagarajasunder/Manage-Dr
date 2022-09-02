@@ -24,6 +24,8 @@ import com.geekydroid.managedr.ui.dialogs.NewDivisionFragment
 import com.geekydroid.managedr.utils.DialogInputType
 import com.geekydroid.managedr.utils.GenericDialogOnClickListener
 import com.geekydroid.managedr.utils.uiutils.PickerUtils
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -179,7 +181,9 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
     }
 
     private fun openDatePicker() {
-        val datePicker = PickerUtils.getDatePicker()
+        val constraintsBuilder = CalendarConstraints.Builder()
+            .setValidator(DateValidatorPointBackward.now())
+        val datePicker = PickerUtils.getDatePicker().setCalendarConstraints(constraintsBuilder.build()).build()
         datePicker.addOnPositiveButtonClickListener {
             viewmodel.updateTransactionDate(it)
         }

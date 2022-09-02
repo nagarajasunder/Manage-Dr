@@ -5,11 +5,11 @@ import com.google.android.material.datepicker.MaterialDatePicker
 
 object PickerUtils {
 
-    fun getDatePicker(titleText: String? = null): MaterialDatePicker<Long> =
+    fun getDatePicker(titleText: String? = null): MaterialDatePicker.Builder<Long> =
         MaterialDatePicker.Builder.datePicker()
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .setTitleText(titleText ?: "Select Date")
-            .build()
+
 
 
     fun getDateRangePicker(

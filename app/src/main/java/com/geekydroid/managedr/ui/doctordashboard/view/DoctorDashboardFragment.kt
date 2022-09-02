@@ -3,16 +3,17 @@ package com.geekydroid.managedr.ui.doctordashboard.view
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -41,6 +42,7 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
     private val args:DoctorDashboardFragmentArgs by navArgs()
     private val viewmodel:DoctorDashboardViewmodel by viewModels()
     private lateinit var adapter: GenericAdapter
+    private lateinit var host:FragmentActivity
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +55,7 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        host = requireActivity()
         binding.viewmodel = viewmodel
         binding.lifecycleOwner = viewLifecycleOwner
         doctorId = args.doctorId
@@ -168,6 +171,21 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
         binding.dashboardRecyclerView.isNestedScrollingEnabled = false
         adapter = GenericAdapter(this,R.layout.transaction_card)
         binding.dashboardRecyclerView.adapter = adapter
+
+        host.addMenuProvider(object : MenuProvider{
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.doctor_dashboard_menu,menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when(menuItem.itemId)
+                {
+                    R.id.edit -> viewmodel.onEditMenuItemClicked()
+                }
+                return true
+            }
+
+        },viewLifecycleOwner,Lifecycle.State.RESUMED)
     }
 
 
