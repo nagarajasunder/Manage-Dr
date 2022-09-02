@@ -1,6 +1,5 @@
 package com.geekydroid.managedr.ui.doctordashboard.viewmodel
 
-import android.util.Log
 import androidx.core.util.Pair
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -25,11 +24,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val TAG = "DoctorDashboardViewmode"
+
 @HiltViewModel
 class DoctorDashboardViewmodel @Inject constructor(private val repository: DoctorDashboardRepository) :
     ViewModel() {
 
-    private var doctorID:Int = -1
+    private var doctorID: Int = -1
     private val _transactionData: MutableLiveData<Resource<List<DoctorDashboardTxData>>> =
         MutableLiveData(Resource.Loading())
     val transactionData: LiveData<Resource<List<DoctorDashboardTxData>>> = _transactionData
@@ -40,17 +40,17 @@ class DoctorDashboardViewmodel @Inject constructor(private val repository: Docto
         Pair(MaterialDatePicker.thisMonthInUtcMilliseconds(),
             MaterialDatePicker.todayInUtcMilliseconds())
 
-    private var cityData:List<MdrCity> = listOf()
-    private val selectedCityIndices:MutableSet<Int> = mutableSetOf()
+    private var cityData: List<MdrCity> = listOf()
+    private val selectedCityIndices: MutableSet<Int> = mutableSetOf()
     val cityFilterText = MutableLiveData("City")
     var selectedCityData: BooleanArray = booleanArrayOf()
-    private var cityNames:List<String> = listOf()
+    private var cityNames: List<String> = listOf()
 
-    private var divisionData:List<MdrCategory> = listOf()
-    var divisionNames:List<String> = listOf()
-    private val selectedDivisionIndices:MutableSet<Int> = mutableSetOf()
+    private var divisionData: List<MdrCategory> = listOf()
+    var divisionNames: List<String> = listOf()
+    private val selectedDivisionIndices: MutableSet<Int> = mutableSetOf()
     val divisionFilterText = MutableLiveData("Division")
-    var selectedDivisionData:BooleanArray = booleanArrayOf()
+    var selectedDivisionData: BooleanArray = booleanArrayOf()
 
     init {
         getAllCities()
@@ -58,10 +58,11 @@ class DoctorDashboardViewmodel @Inject constructor(private val repository: Docto
         setDefaultDateRange()
     }
 
-    private val _totalAmountPair:MutableLiveData<Pair<String,String>> = MutableLiveData(Pair(TextUtils.getCurrencyFormat(0.0),TextUtils.getCurrencyFormat(0.0)))
-    val totalAmountPair:LiveData<Pair<String,String>> = _totalAmountPair
+    private val _totalAmountPair: MutableLiveData<Pair<String, String>> =
+        MutableLiveData(Pair(TextUtils.getCurrencyFormat(0.0), TextUtils.getCurrencyFormat(0.0)))
+    val totalAmountPair: LiveData<Pair<String, String>> = _totalAmountPair
 
-    private val baseQuery:String = "SELECT `S`.service_id as transactionId, " +
+    private val baseQuery: String = "SELECT `S`.service_id as transactionId, " +
             "`S`.transaction_type as transactionType, " +
             "`S`.service_date as transactionDate, " +
             "`S`.service_amount as transactionAmount, " +
@@ -78,8 +79,8 @@ class DoctorDashboardViewmodel @Inject constructor(private val repository: Docto
     private val doctorDashboardEventsChannel: Channel<doctorDashboardEvents> = Channel()
     val doctorDashboardEvent = doctorDashboardEventsChannel.receiveAsFlow()
 
-    private val txTypeFilter:MutableSet<TransactionType> = mutableSetOf()
-    val txAmountFilter:MutableLiveData<String> = MutableLiveData("")
+    private val txTypeFilter: MutableSet<TransactionType> = mutableSetOf()
+    val txAmountFilter: MutableLiveData<String> = MutableLiveData("")
 
     private fun setDefaultDateRange() {
         _dateRange.value =
@@ -97,11 +98,14 @@ class DoctorDashboardViewmodel @Inject constructor(private val repository: Docto
     }
 
     private fun calculateTotalValue(data: List<DoctorDashboardTxData>) {
-        if (data.isNotEmpty())
-        {
-            val serivceTotalStr = TextUtils.getCurrencyFormat(data.filter { it.transactionType == TransactionType.SERVICE.name }.sumOf { it.transactionAmount })
-            val returnTotalStr = TextUtils.getCurrencyFormat(data.filter { it.transactionType == TransactionType.COLLECTION.name }.sumOf { it.transactionAmount })
-            _totalAmountPair.value = Pair(serivceTotalStr,returnTotalStr)
+        if (data.isNotEmpty()) {
+            val serivceTotalStr =
+                TextUtils.getCurrencyFormat(data.filter { it.transactionType == TransactionType.SERVICE.name }
+                    .sumOf { it.transactionAmount })
+            val returnTotalStr =
+                TextUtils.getCurrencyFormat(data.filter { it.transactionType == TransactionType.COLLECTION.name }
+                    .sumOf { it.transactionAmount })
+            _totalAmountPair.value = Pair(serivceTotalStr, returnTotalStr)
         }
     }
 
@@ -158,19 +162,16 @@ class DoctorDashboardViewmodel @Inject constructor(private val repository: Docto
         selectedCityIndices.add(index)
     }
 
-    fun removeCity(index: Int)
-    {
+    fun removeCity(index: Int) {
         selectedCityIndices.remove(index)
     }
 
     fun showCitySelection() = viewModelScope.launch {
-        if (selectedCityIndices.isNotEmpty())
-        {
+        if (selectedCityIndices.isNotEmpty()) {
             val builder = StringBuilder()
             selectedCityIndices.forEachIndexed { index, i ->
                 builder.append(cityData[i].cityName)
-                if (index != selectedCityIndices.size -1)
-                {
+                if (index != selectedCityIndices.size - 1) {
                     builder.append(", ")
                 }
 
@@ -189,14 +190,12 @@ class DoctorDashboardViewmodel @Inject constructor(private val repository: Docto
         selectedDivisionIndices.add(index)
     }
 
-    fun removeDivision(index: Int)
-    {
+    fun removeDivision(index: Int) {
         selectedDivisionIndices.remove(index)
     }
 
     fun showDivisionSelection() = viewModelScope.launch {
-        if (selectedDivisionIndices.isNotEmpty())
-        {
+        if (selectedDivisionIndices.isNotEmpty()) {
             val builder = StringBuilder()
             selectedDivisionIndices.forEachIndexed { index, i ->
                 builder.append(divisionData[i].categoryName)
@@ -228,15 +227,14 @@ class DoctorDashboardViewmodel @Inject constructor(private val repository: Docto
         }
     }
 
-    fun getTransactionDataWithFilters(doctorId: Int)
-    {
+    fun getTransactionDataWithFilters(doctorId: Int) {
         viewModelScope.launch {
             val query = constructQuery(doctorId)
             repository.getDoctorDatax(SimpleSQLiteQuery(query))
-                .collect{
+                .collect {
                     _transactionData.postValue(Resource.Success(it))
                     calculateTotalValue(it)
-            }
+                }
         }
     }
 
@@ -257,77 +255,62 @@ class DoctorDashboardViewmodel @Inject constructor(private val repository: Docto
         txTypeFilter.clear()
     }
 
-    fun constructQuery(doctorId: Int):String
-    {
+    fun constructQuery(doctorId: Int): String {
         val queryBuilder = StringBuilder()
         queryBuilder.append(baseQuery)
         queryBuilder.append("`S`.serviced_doctor_id = $doctorId AND ")
 
-            if (dateRangePair.first != null)
-            {
-                queryBuilder.append("`S`.service_date >= ${dateRangePair.first} AND ")
-            }
-            if (dateRangePair.second != null)
-            {
-                queryBuilder.append("`S`.service_date <= ${dateRangePair.second} AND ")
-            }
+        if (dateRangePair.first != null) {
+            queryBuilder.append("`S`.service_date >= ${dateRangePair.first} AND ")
+        }
+        if (dateRangePair.second != null) {
+            queryBuilder.append("`S`.service_date <= ${dateRangePair.second} AND ")
+        }
 
-        if (txTypeFilter.isEmpty())
-        {
+        if (txTypeFilter.isEmpty()) {
             queryBuilder.append(" 1=1 AND ")
-        }
-        else if (txTypeFilter.size == 2)
-        {
+        } else if (txTypeFilter.size == 2) {
             queryBuilder.append(" 1=1 AND ")
-        }
-        else
-        {
-            if (txTypeFilter.contains(TransactionType.SERVICE))
-            {
+        } else {
+            if (txTypeFilter.contains(TransactionType.SERVICE)) {
                 queryBuilder.append(" `S`.transaction_type = 'SERVICE' AND ")
-            }
-            else
-            {
+            } else {
                 queryBuilder.append(" `S`.transaction_type = 'COLLECTION' AND ")
             }
         }
 
-        if (!txAmountFilter.value.isNullOrEmpty())
-        {
+        if (!txAmountFilter.value.isNullOrEmpty()) {
             queryBuilder.append("`S`.service_amount = ${txAmountFilter.value!!.toInt()} AND ")
-        }
-        else
-        {
+        } else {
             queryBuilder.append(" 1=1 AND ")
         }
 
-        if (selectedCityIndices.isEmpty())
-        {
+        if (selectedCityIndices.isEmpty()) {
             queryBuilder.append(" 1=1 AND ")
-        }
-        else
-        {
-            val cityIds = selectedCityIndices.map { cityData[it].cityId.toString() }.joinToString { it }
+        } else {
+            val cityIds =
+                selectedCityIndices.map { cityData[it].cityId.toString() }.joinToString { it }
             queryBuilder.append(" `C`.city_id in ($cityIds) AND ")
         }
-        if (selectedDivisionIndices.isEmpty())
-        {
+        if (selectedDivisionIndices.isEmpty()) {
             queryBuilder.append(" 1=1 ")
-        }
-        else
-        {
-            val divisionIds = selectedDivisionIndices.map { divisionData[it].categoryID.toString() }.joinToString { it }
+        } else {
+            val divisionIds = selectedDivisionIndices.map { divisionData[it].categoryID.toString() }
+                .joinToString { it }
             queryBuilder.append("`D`.category_id in ($divisionIds) ")
         }
 
         return queryBuilder.toString()
     }
 
-    fun getCityNames():List<String> = cityNames
+    fun getCityNames(): List<String> = cityNames
 
-    fun setDoctorId(id:Int)
-    {
+    fun setDoctorId(id: Int) {
         doctorID = id
+    }
+
+    fun onEditMenuItemClicked() = viewModelScope.launch {
+        doctorDashboardEventsChannel.send(doctorDashboardEvents.navigateToEditDoctorScreen)
     }
 }
 
@@ -335,5 +318,6 @@ sealed class doctorDashboardEvents {
     object addNewServiceClicked : doctorDashboardEvents()
     object addNewCollectionClicked : doctorDashboardEvents()
     object showDateRangePicker : doctorDashboardEvents()
-    object clearChipSelection: doctorDashboardEvents()
+    object clearChipSelection : doctorDashboardEvents()
+    object navigateToEditDoctorScreen : doctorDashboardEvents()
 }

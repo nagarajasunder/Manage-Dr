@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="doctorData"
             type="com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData" />
@@ -30,7 +31,7 @@
             android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/btn_service">
+            app:layout_constraintBottom_toTopOf="@+id/transaction_layout">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -46,8 +47,8 @@
                     android:ellipsize="end"
                     android:inputType="textMultiLine"
                     android:maxLines="2"
-                    android:text="@{doctorData.doctorName}"
                     android:scrollHorizontally="false"
+                    android:text="@{doctorData.doctorName}"
                     app:layout_constraintEnd_toStartOf="@+id/iv_mobile_icon"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -60,6 +61,8 @@
                     android:layout_marginEnd="8dp"
                     android:contentDescription="@string/content_desc_mobile_number"
                     android:src="@drawable/phone"
+                    android:clickable="false"
+                    android:visibility="@{doctorData.doctorMobileNumber.empty ? View.GONE : View.VISIBLE}"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_doctor_name"
                     app:layout_constraintEnd_toStartOf="@+id/tv_doctor_mobile_number"
                     app:layout_constraintTop_toTopOf="@+id/tv_doctor_name" />
@@ -75,8 +78,8 @@
                     android:inputType="textMultiLine"
                     android:maxLines="2"
                     android:scrollHorizontally="false"
-                    android:text="@{doctorData.doctorMobileNumber}"
                     android:singleLine="true"
+                    android:text="@{doctorData.doctorMobileNumber}"
                     android:textAlignment="textStart"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_doctor_name"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -92,8 +95,9 @@
                     android:clickable="false"
                     android:inputType="textMultiLine"
                     android:maxLines="2"
-                    android:text="@{doctorData.hospitalName}"
                     android:scrollHorizontally="false"
+                    android:text="@{doctorData.hospitalName}"
+                    android:visibility="@{doctorData.hospitalName.empty ? View.GONE : View.VISIBLE}"
                     app:layout_constraintEnd_toStartOf="@+id/tv_doctor_city"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_doctor_name"
@@ -109,6 +113,7 @@
                     android:clickable="false"
                     android:inputType="textMultiLine"
                     android:maxLines="2"
+                    android:visibility="gone"
                     android:scrollHorizontally="false"
                     android:textAlignment="textEnd"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -116,34 +121,91 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_doctor_name"
                     tools:ignore="TextViewEdits" />
 
+                <ImageView
+                    android:id="@+id/iv_date_of_birth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="@string/hint_birthday_date"
+                    android:src="@drawable/cake"
+                    android:clickable="false"
+                    android:visibility="@{doctorData.doctorDateOfBirth > 0L ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_hospital_name" />
+
+                <TextView
+                    android:id="@+id/tv_date_of_birth"
+                    style="@style/textViewSmallPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@{doctorData.dateOfBirthText}"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_date_of_birth"
+                    app:layout_constraintStart_toEndOf="@+id/iv_date_of_birth"
+                    app:layout_constraintTop_toTopOf="@+id/iv_date_of_birth" />
+
+                <ImageView
+                    android:id="@+id/iv_wedding_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="@string/hint_birthday_date"
+                    android:src="@drawable/people"
+                    android:layout_marginEnd="8dp"
+                    android:visibility="@{doctorData.doctorWeddingDate > 0L ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_wedding_anniversary_date"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_hospital_name" />
+
+                <TextView
+                    android:id="@+id/tv_wedding_anniversary_date"
+                    style="@style/textViewSmallPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{doctorData.weddingDateText}"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_wedding_date"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/iv_wedding_date" />
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <Button
-            android:id="@+id/btn_service"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/transaction_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/doctor_info_card"
-            app:layout_constraintBottom_toTopOf="@+id/filter_card"
-            android:text="@string/add_service"
-            android:layout_marginStart="8dp"
-            android:onClick="@{() -> viewmodel.AddNewServiceOnClick()}"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+            app:layout_constraintTop_toBottomOf="@+id/doctor_info_card"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <Button
-            android:id="@+id/btn_collection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@+id/btn_service"
-            android:text="@string/add_collection"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_service"
-            android:onClick="@{() -> viewmodel.AddNewCollectionOnClick()}"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+            <Button
+                android:id="@+id/btn_service"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_service"
+                android:layout_marginStart="8dp"
+                android:onClick="@{() -> viewmodel.AddNewServiceOnClick()}"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:layout_marginEnd="16dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+            <Button
+                android:id="@+id/btn_collection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/add_collection"
+                android:onClick="@{() -> viewmodel.AddNewCollectionOnClick()}"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+        </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/filter_card"
@@ -152,9 +214,9 @@
             android:layout_marginStart="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_service"
+            app:layout_constraintTop_toBottomOf="@+id/transaction_layout"
             app:layout_constraintBottom_toTopOf="@+id/divider_top"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             style="@style/cardItem"
             android:clickable="false"
             android:layout_marginEnd="8dp">
