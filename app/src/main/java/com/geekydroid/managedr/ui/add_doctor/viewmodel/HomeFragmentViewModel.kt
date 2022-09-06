@@ -63,10 +63,15 @@ class HomeFragmentViewModel @Inject constructor(private val repository: HomeFrag
         }
     }
 
+    fun settingsMenuClicked() = viewModelScope.launch {
+        homeFragmentEventsChannel.send(HomeFragmentEvents.openSettingsPage)
+    }
+
 
 }
 
 sealed class HomeFragmentEvents {
     object addNewDoctorFabClicked : HomeFragmentEvents()
+    object openSettingsPage : HomeFragmentEvents()
     data class navigateToDoctorDashboard(val doctorId:Int) : HomeFragmentEvents()
 }

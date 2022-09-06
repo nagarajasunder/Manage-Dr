@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="viewmodel"
+            type="com.geekydroid.managedr.ui.settings.viewmodel.SettingsViewmodel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -70,6 +72,8 @@
             android:minHeight="36dp"
             android:gravity="center_vertical"
             android:text="@string/export_data"
+            android:clickable="true"
+            android:focusable="true"
             android:layout_marginStart="12dp"
             style="@style/textViewRegular"/>
 

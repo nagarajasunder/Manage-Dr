@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_homeFragment_to_doctorDashboardFragment"
             app:destination="@id/doctorDashboardFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addNewDoctorFragment"
@@ -49,4 +52,8 @@
             android:name="transactionType"
             app:argType="com.geekydroid.managedr.application.TransactionType" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.geekydroid.managedr.ui.settings.ui.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>

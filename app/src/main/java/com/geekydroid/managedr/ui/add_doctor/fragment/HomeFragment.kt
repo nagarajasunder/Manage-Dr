@@ -72,9 +72,15 @@ class HomeFragment : Fragment(),UiOnClickListener {
                 {
                     is HomeFragmentEvents.addNewDoctorFabClicked -> navigateToAddNewDoctorScreen()
                     is HomeFragmentEvents.navigateToDoctorDashboard -> navigateToDoctorDashboard(event.doctorId)
+                    HomeFragmentEvents.openSettingsPage -> navigateToSettingsPage()
                 }
             }
         }
+    }
+
+    private fun navigateToSettingsPage() {
+        val action = HomeFragmentDirections.actionHomeFragmentToSettingsFragment()
+        findNavController().navigate(action)
     }
 
     private fun navigateToDoctorDashboard(doctorId:Int) {
@@ -111,6 +117,7 @@ class HomeFragment : Fragment(),UiOnClickListener {
                     R.id.sort_name_desc -> viewmodel.updateSortOrder(SortPreferences.SORT_BY_NAME_DESC)
                     R.id.newest_first -> viewmodel.updateSortOrder(SortPreferences.NEWEST_FIRST)
                     R.id.oldest_first -> viewmodel.updateSortOrder(SortPreferences.OLDEST_FIRST)
+                    R.id.settings -> viewmodel.settingsMenuClicked()
                 }
                 return true
             }

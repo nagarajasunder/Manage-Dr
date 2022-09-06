@@ -53,4 +53,7 @@ interface ServiceDao {
             "LEFT JOIN MDR_CITY `C` " +
             "ON (`C`.city_id == `S`.city_id) GROUP BY `C`.city_id ORDER BY `S`.created_on ASC")
     suspend fun getDataForExport(): List<ExportDoctorData>
+
+    @Query("SELECT DISTINCT(`C`.city_name) FROM MDR_SERVICE `S` LEFT JOIN MDR_CITY `C` WHERE `C`.city_id == `S`.city_id")
+    suspend fun getCityNames(): List<String>
 }

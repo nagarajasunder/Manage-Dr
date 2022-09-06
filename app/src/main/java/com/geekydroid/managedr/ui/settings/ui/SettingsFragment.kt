@@ -45,6 +45,10 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         observeUiEvents()
+
+        binding.tvExportData.setOnClickListener {
+            viewmodel.exportDataClicked()
+        }
     }
 
     private fun observeUiEvents() {
@@ -67,6 +71,7 @@ class SettingsFragment : Fragment() {
                 "Manage Dr ${DateUtils.getTimeStampFormatted()}"
             )
         }
+        activityResult.launch(intent)
     }
 
 
