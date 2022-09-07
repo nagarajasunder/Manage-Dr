@@ -47,11 +47,11 @@ interface ServiceDao {
             "`S`.updated_on as updatedOn" +
             " FROM MDR_SERVICE `S` " +
             "LEFT JOIN MDR_DOCTOR `DR` " +
-            "ON (`DR`.doctor_id == `S`.serviced_doctor_id) "+
+            "ON (`S`.serviced_doctor_id == `DR`.doctor_id) "+
             "LEFT JOIN MDR_CATEGORY `D` " +
-            "ON (`D`.category_id == `S`.category_id) " +
+            "ON (`S`.category_id == `D`.category_id) " +
             "LEFT JOIN MDR_CITY `C` " +
-            "ON (`C`.city_id == `S`.city_id) GROUP BY `C`.city_id ORDER BY `S`.created_on ASC")
+            "ON (`S`.city_id == `C`.city_id) ORDER BY `S`.created_on ASC")
     suspend fun getDataForExport(): List<ExportDoctorData>
 
     @Query("SELECT DISTINCT(`C`.city_name) FROM MDR_SERVICE `S` LEFT JOIN MDR_CITY `C` WHERE `C`.city_id == `S`.city_id")
