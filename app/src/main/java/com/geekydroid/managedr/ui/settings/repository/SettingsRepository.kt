@@ -9,5 +9,6 @@ class SettingsRepository @Inject constructor(private val serviceDao: ServiceDao)
 
     suspend fun getDataForExport() = serviceDao.getDataForExport()
     suspend fun getCityNames() = serviceDao.getCityNames()
+    suspend fun getTransactionCount() = serviceDao.getTransactionCount()
 
 }

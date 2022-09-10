@@ -1,6 +1,7 @@
 package com.geekydroid.managedr.ui.settings.viewmodel
 
 import android.net.Uri
+import android.provider.Settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.geekydroid.managedr.ManageDrApp
@@ -16,7 +17,9 @@ import javax.inject.Inject
 
 private const val TAG = "SettingsViewmodel"
 @HiltViewModel
-class SettingsViewmodel @Inject constructor(private val repository: SettingsRepository,private val application:ManageDrApp) : ViewModel() {
+class SettingsViewmodel @Inject constructor(
+    private val repository: SettingsRepository
+    ) : ViewModel() {
 
     private val eventChannel: Channel<SettingsEvents> = Channel()
     val events:Flow<SettingsEvents> = eventChannel.receiveAsFlow()
@@ -27,25 +30,15 @@ class SettingsViewmodel @Inject constructor(private val repository: SettingsRepo
 
     fun exportData(uri: Uri?) {
         viewModelScope.launch {
-            val data = repository.getDataForExport()
-            val cityNames = repository.getCityNames()
-            if (data.isNotEmpty() && cityNames.isNotEmpty())
+            val count = repository.getTransactionCount()
+            if (count > 0)
             {
-                val workBook = DataExport.createWorkBook(data,cityNames)
-                createExcel(application,workBook,uri)
+                eventChannel.send(SettingsEvents.exportDataToExcel(uri!!))
             }
-        }
-    }
-
-    private fun createExcel(application: ManageDrApp, workBook: XSSFWorkbook, uri: Uri?) {
-        try {
-            val fos = application.contentResolver.openOutputStream(uri!!)
-            workBook.write(fos)
-            fos!!.close()
-        }
-        catch (throwable:Throwable)
-        {
-
+            else
+            {
+                eventChannel.send(SettingsEvents.showNoTransactionError)
+            }
         }
     }
 
@@ -54,4 +47,6 @@ class SettingsViewmodel @Inject constructor(private val repository: SettingsRepo
 sealed class SettingsEvents
 {
     object openFilePicker : SettingsEvents()
+    data class exportDataToExcel(val uri: Uri):SettingsEvents()
+    object showNoTransactionError : SettingsEvents()
 }

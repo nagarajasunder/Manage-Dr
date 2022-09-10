@@ -1,6 +1,8 @@
 package com.geekydroid.managedr.ui.dataExport
 
+import android.net.Uri
 import android.util.Log
+import com.geekydroid.managedr.ManageDrApp
 import com.geekydroid.managedr.ui.settings.model.ExportDoctorData
 import com.geekydroid.managedr.utils.TextUtils
 import org.apache.poi.ss.usermodel.*
@@ -10,25 +12,38 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import java.io.FileOutputStream
 
-private const val TAG = "DataExport"
 object DataExport {
 
-    var ROW_NUMBER = 0
-    val EXTRA_LINE_SPACE = 1
-    val MOVE_ROW_TO_NEXT_LINE = 1
+    private var ROW_NUMBER = 0
+    private val EXTRA_LINE_SPACE = 1
+    private val MOVE_ROW_TO_NEXT_LINE = 1
     private lateinit var workBook:XSSFWorkbook
     private lateinit var styleMap:MutableMap<String,CellStyle>
 
-    suspend fun createWorkBook(data: List<ExportDoctorData>, cityNames: List<String>) : XSSFWorkbook {
-        workBook = XSSFWorkbook()
-        styleMap = createCellStyles()
-        val sheets = createSheetsForEachCity(cityNames, workBook)
-        sheets.forEach { sheet ->
-            writePerDoctorData(sheet, data.filter { it.cityName == sheet.sheetName })
-            ROW_NUMBER = 0
+    suspend fun createWorkBook(data: List<ExportDoctorData>, cityNames: List<String>,application:ManageDrApp,uri:Uri) {
+        try {
+            Log.d(TAG, "createWorkBook: running")
+            workBook = XSSFWorkbook()
+            styleMap = createCellStyles()
+            val sheets = createSheetsForEachCity(cityNames, workBook)
+            sheets.forEach { sheet ->
+                writePerDoctorData(sheet, data.filter { it.cityName == sheet.sheetName })
+                ROW_NUMBER = 0
+            }
+            createExcel(application, workBook,uri)
         }
-        return workBook
+        catch (throwable:Throwable)
+        {
+
+        }
+    }
+
+    private fun createExcel(application: ManageDrApp, workBook: XSSFWorkbook, uri: Uri) {
+        val fos = application.contentResolver.openOutputStream(uri)
+        workBook.write(fos)
+        fos!!.close()
     }
 
     private suspend fun writePerDoctorData(
@@ -46,12 +61,8 @@ object DataExport {
         data: List<ExportDoctorData>,
         sheet: XSSFSheet,
     ) {
-        Log.d(TAG, "writeDoctorData: For city ${sheet.sheetName}")
-        Log.d(TAG, "writeDoctorData: doctor data $data")
         val totalServiceAmount = data.filter { it.transactionType == "SERVICE" }.sumOf { serviceList -> serviceList.transactionAmount }
         val totalReturnAmount = data.filter { it.transactionType == "COLLECTION" }.sumOf { collectionList -> collectionList.transactionAmount }
-        Log.d(TAG, "writeDoctorData: $totalServiceAmount service amount")
-        Log.d(TAG, "writeDoctorData: $totalReturnAmount return amount")
         writeDoctorName(sheet, doctorName)
         writeSheetHeaders(sheet, listOf("S.No",
             "Date of Transaction",

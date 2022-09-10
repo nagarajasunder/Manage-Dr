@@ -56,4 +56,7 @@ interface ServiceDao {
 
     @Query("SELECT DISTINCT(`C`.city_name) FROM MDR_SERVICE `S` LEFT JOIN MDR_CITY `C` WHERE `C`.city_id == `S`.city_id")
     suspend fun getCityNames(): List<String>
+
+    @Query("SELECT COUNT(service_id) FROM MDR_SERVICE")
+    suspend fun getTransactionCount():Int
 }
