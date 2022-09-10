@@ -99,6 +99,9 @@ dependencies {
     implementation "androidx.datastore:datastore:1.0.0"
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
+    //Apache POI for document export
+    implementation 'com.github.SUPERCILEX.poi-android:poi:3.17'
+    compileOnly 'org.apache.poi:poi-ooxml:3.17'
 
 
 
