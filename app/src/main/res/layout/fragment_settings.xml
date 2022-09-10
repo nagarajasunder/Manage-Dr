@@ -37,7 +37,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_title"/>
 
         <TextView
-            android:id="@+id/tv_categories"
+            android:id="@+id/tv_settings_editable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,29 +45,18 @@
             android:layout_marginTop="16dp"
             android:minHeight="36dp"
             android:gravity="center_vertical"
-            android:text="@string/categories"
+            android:text="@string/settings_editable"
             android:layout_marginStart="12dp"
             style="@style/textViewRegular"/>
 
-        <TextView
-            android:id="@+id/tv_cities"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_categories"
-            android:layout_marginTop="8dp"
-            android:minHeight="36dp"
-            android:gravity="center_vertical"
-            android:text="@string/cities"
-            android:layout_marginStart="12dp"
-            style="@style/textViewRegular"/>
+
 
         <TextView
             android:id="@+id/tv_export_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_cities"
+            app:layout_constraintTop_toBottomOf="@+id/tv_settings_editable"
             android:layout_marginTop="8dp"
             android:minHeight="36dp"
             android:gravity="center_vertical"

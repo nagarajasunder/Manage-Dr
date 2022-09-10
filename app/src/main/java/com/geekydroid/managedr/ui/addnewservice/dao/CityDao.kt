@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.geekydroid.managedr.ui.addnewservice.model.MdrCity
+import com.geekydroid.managedr.ui.settings.model.SettingsEditData
 import kotlinx.coroutines.flow.Flow
 
 @Dao

@@ -24,7 +24,6 @@ object DataExport {
 
     suspend fun createWorkBook(data: List<ExportDoctorData>, cityNames: List<String>,application:ManageDrApp,uri:Uri) {
         try {
-            Log.d(TAG, "createWorkBook: running")
             workBook = XSSFWorkbook()
             styleMap = createCellStyles()
             val sheets = createSheetsForEachCity(cityNames, workBook)

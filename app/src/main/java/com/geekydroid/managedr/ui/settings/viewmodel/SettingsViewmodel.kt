@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.geekydroid.managedr.ManageDrApp
 import com.geekydroid.managedr.ui.dataExport.DataExport
+import com.geekydroid.managedr.ui.settings.model.SettingsEditType
 import com.geekydroid.managedr.ui.settings.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -42,6 +43,13 @@ class SettingsViewmodel @Inject constructor(
         }
     }
 
+    fun settingsEditableClicked() {
+        viewModelScope.launch {
+            eventChannel.send(SettingsEvents.openCityDivisionScreen(SettingsEditType.EDIT_TYPE_DIVISION))
+        }
+    }
+
+
 }
 
 sealed class SettingsEvents
@@ -49,4 +57,5 @@ sealed class SettingsEvents
     object openFilePicker : SettingsEvents()
     data class exportDataToExcel(val uri: Uri):SettingsEvents()
     object showNoTransactionError : SettingsEvents()
+    data class openCityDivisionScreen(val editType:SettingsEditType) : SettingsEvents()
 }

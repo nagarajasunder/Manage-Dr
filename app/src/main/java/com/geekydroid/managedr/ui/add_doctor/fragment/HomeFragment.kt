@@ -145,7 +145,8 @@ class HomeFragment : Fragment(),UiOnClickListener {
     }
 
 
-    override fun onClick(position: Int, data: ScreenData?) {
+    override fun onClick(vararg args:Any) {
+        val data = args[0]
         if (data is HomeScreenDoctorData)
         {
             viewmodel.onDoctorClicked(data)

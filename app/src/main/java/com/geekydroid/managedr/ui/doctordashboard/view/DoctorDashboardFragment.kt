@@ -236,7 +236,7 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
        }
     }
 
-    override fun onClick(position: Int, data: ScreenData?) {
+    override fun onClick(vararg args: Any) {
 
     }
 
