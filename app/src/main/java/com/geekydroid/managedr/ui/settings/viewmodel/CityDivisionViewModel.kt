@@ -9,14 +9,12 @@ import com.geekydroid.managedr.ui.addnewservice.model.MdrCategory
 import com.geekydroid.managedr.ui.addnewservice.model.MdrCity
 import com.geekydroid.managedr.ui.settings.model.SettingsEditData
 import com.geekydroid.managedr.ui.settings.repository.SettingsRepository
+import com.geekydroid.managedr.ui.settings.ui.CityDivisionFragment
 import com.geekydroid.managedr.utils.DialogInputType
 import com.geekydroid.managedr.utils.TextUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,8 +31,29 @@ class CityDivisionViewModel @Inject constructor(private val repository:SettingsR
     private val selectedType = MutableStateFlow(DialogInputType.CITY.name)
     private val selectedTypeLiveData = MutableLiveData(DialogInputType.CITY.name)
 
+    private var cityData:MutableLiveData<List<String>> = MutableLiveData(listOf())
+    private var divisionData:MutableLiveData<List<String>> = MutableLiveData(listOf())
+
     init {
         getData()
+        getAllCities()
+        getAllDivisions()
+    }
+
+    private fun getAllDivisions() {
+        viewModelScope.launch {
+            repository.getAllDivisionNames().collect{
+                divisionData.postValue(it)
+            }
+        }
+    }
+
+    private fun getAllCities() {
+        viewModelScope.launch {
+            repository.getAllCityNames().collect{
+                cityData.postValue(it)
+            }
+        }
     }
 
     private fun getData() = viewModelScope.launch {
@@ -115,10 +134,65 @@ class CityDivisionViewModel @Inject constructor(private val repository:SettingsR
             }
         }
     }
+
+    fun isCityDuplicate(input: String) {
+       viewModelScope.launch {
+           if (cityData.value.isNullOrEmpty())
+           {
+               addNewCity(input)
+               eventsChannel.send(CityDivisionFragmentEvents.DismissAddNewItemDialog)
+           }
+           else
+           {
+               if (cityData.value!!.map { it.lowercase() }.contains(input.lowercase()))
+               {
+                   eventsChannel.send(CityDivisionFragmentEvents.showDuplicateInputError(input))
+               }
+               else
+               {
+                   addNewCity(input)
+                   eventsChannel.send(CityDivisionFragmentEvents.DismissAddNewItemDialog)
+               }
+           }
+       }
+    }
+
+    private suspend fun addNewCity(input: String) {
+        val newCity = MdrCity(cityName = TextUtils.trimText(input))
+        repository.addNewCity(newCity)
+    }
+
+    fun isDuplicateDivision(input: String) {
+        viewModelScope.launch {
+            if (divisionData.value.isNullOrEmpty())
+            {
+                addNewDivision(input)
+                eventsChannel.send(CityDivisionFragmentEvents.DismissAddNewItemDialog)
+            }
+            else
+            {
+                if (divisionData.value!!.map { it.lowercase() }.contains(input.lowercase()))
+                {
+                    eventsChannel.send(CityDivisionFragmentEvents.showDuplicateInputError(input))
+                }
+                else
+                {
+                    addNewDivision(input)
+                    eventsChannel.send(CityDivisionFragmentEvents.DismissAddNewItemDialog)
+                }
+            }
+        }
+    }
+
+    private suspend fun addNewDivision(input: String) {
+        val newDivision = MdrCategory(categoryName = TextUtils.trimText(input))
+        repository.addNewDivision(newDivision)
+    }
 }
 
 sealed class CityDivisionFragmentEvents
 {
     data class showDuplicateInputError(val input:String) : CityDivisionFragmentEvents()
     object DismissDialog : CityDivisionFragmentEvents()
+    object DismissAddNewItemDialog : CityDivisionFragmentEvents()
 }

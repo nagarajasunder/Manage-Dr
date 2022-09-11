@@ -20,7 +20,7 @@
     <string name="text_add_service">Add Service</string>
     <string name="text_add_return">Add Return</string>
     <string name="enter_transaction_amount">Transaction amount</string>
-    <string name="hint_add_new_category">Add new category</string>
+    <string name="hint_add_new_category">Add new division</string>
     <string name="hint_add_new_city">Add new city</string>
     <string name="division_name">Division name</string>
     <string name="btn_text_add">Add</string>

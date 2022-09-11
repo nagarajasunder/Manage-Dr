@@ -34,4 +34,7 @@ interface CategoryDao {
 
     @Query("DELETE FROM MDR_CATEGORY WHERE category_id = :id")
     suspend fun deleteCategoryById(id:Int)
+
+    @Query("SELECT category_name FROM MDR_CATEGORY")
+    fun getAllCategoryNames(): Flow<List<String>>
 }

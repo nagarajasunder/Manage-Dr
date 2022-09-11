@@ -43,4 +43,15 @@ class SettingsRepository @Inject constructor(
     suspend fun deleteDivisionWithTransactions(id: Int) = externalScope.launch(externalDispatcher) {
         categoryDao.deleteCategoryWithTxs(id)
     }.join()
+
+    fun getAllCityNames() = cityDao.getAllCityNames()
+
+    fun getAllDivisionNames() = categoryDao.getAllCategoryNames()
+    suspend fun addNewCity(newCity: MdrCity) = externalScope.launch(externalDispatcher) {
+        cityDao.insertNewCity(newCity)
+    }.join()
+
+    suspend fun addNewDivision(newDivision:MdrCategory) = externalScope.launch(externalDispatcher) {
+        categoryDao.insertNewCategory(newDivision)
+    }.join()
 }

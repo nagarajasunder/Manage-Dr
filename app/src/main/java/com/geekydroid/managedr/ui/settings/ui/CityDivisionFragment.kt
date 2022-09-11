@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import com.geekydroid.managedr.R
 import com.geekydroid.managedr.adapter.GenericAdapter
 import com.geekydroid.managedr.databinding.FragmentCityDivisionBinding
 import com.geekydroid.managedr.providers.Resource
+import com.geekydroid.managedr.ui.dialogs.NewDivisionFragment
 import com.geekydroid.managedr.ui.settings.model.ActionType
 import com.geekydroid.managedr.ui.settings.model.SettingsEditData
 import com.geekydroid.managedr.ui.settings.viewmodel.CityDivisionFragmentEvents
@@ -33,6 +35,7 @@ class CityDivisionFragment : Fragment(),UiOnClickListener {
     private lateinit var binding:FragmentCityDivisionBinding
     private lateinit var adapter:GenericAdapter
     private var SettingsEditDialog:SettingsEditDialogFragment? = null
+    private var newInputFragment:NewDivisionFragment? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,9 +72,14 @@ class CityDivisionFragment : Fragment(),UiOnClickListener {
                 {
                     is CityDivisionFragmentEvents.showDuplicateInputError -> showDuplicateInputWarning(event.input)
                     CityDivisionFragmentEvents.DismissDialog -> dismissDialog()
+                    CityDivisionFragmentEvents.DismissAddNewItemDialog -> dismissNewItemDialog()
                 }
             }
         }
+    }
+
+    private fun dismissNewItemDialog() {
+        newInputFragment?.dismissDialog()
     }
 
     private fun dismissDialog() {
@@ -80,6 +88,7 @@ class CityDivisionFragment : Fragment(),UiOnClickListener {
 
     private fun showDuplicateInputWarning(input: String) {
         SettingsEditDialog?.showDuplicateWarning(input)
+        newInputFragment?.showDuplicateWarning(input)
     }
 
     private fun setupAdapter(data: List<SettingsEditData>?) {
@@ -105,6 +114,45 @@ class CityDivisionFragment : Fragment(),UiOnClickListener {
                     viewModel.updateEditType(DialogInputType.DIVISION)
                 }
             }
+        }
+
+        binding.chipNewCity.setOnClickListener {
+            showAddNewItemDialog(DialogInputType.CITY)
+        }
+        binding.chipNewDivision.setOnClickListener {
+            showAddNewItemDialog(DialogInputType.DIVISION)
+        }
+    }
+
+    private fun showAddNewItemDialog(type: DialogInputType) {
+        val bundle = Bundle()
+        when (type) {
+            DialogInputType.DIVISION -> {
+                bundle.putString("title", "Add new division")
+                bundle.putString("hint", "Division name")
+            }
+            DialogInputType.CITY -> {
+                bundle.putString("title", "Add new City")
+                bundle.putString("hint", "City name")
+            }
+        }
+        bundle.putString("inputType", type.toString())
+        requireActivity().supportFragmentManager.let {
+            newInputFragment = NewDivisionFragment.newInstance(bundle, object : GenericDialogOnClickListener{
+                override fun onClickDialog(vararg args: Any) {
+                    val input = (args[0] as String)
+                    val dialogType = (args[1] as String)
+                    if (dialogType == DialogInputType.CITY.toString()) {
+                        viewModel.isCityDuplicate(input)
+                    } else {
+                        viewModel.isDuplicateDivision(input)
+                    }
+                }
+
+            }).apply {
+                show(it, "NewDivisionFragment")
+            }
+
         }
     }
 
