@@ -17,7 +17,6 @@ import androidx.navigation.fragment.findNavController
 import com.geekydroid.managedr.R
 import com.geekydroid.managedr.application.services.DataExportService
 import com.geekydroid.managedr.databinding.FragmentSettingsBinding
-import com.geekydroid.managedr.ui.settings.model.SettingsEditType
 import com.geekydroid.managedr.ui.settings.viewmodel.SettingsEvents
 import com.geekydroid.managedr.ui.settings.viewmodel.SettingsViewmodel
 import com.geekydroid.managedr.utils.DateUtils
@@ -70,7 +69,7 @@ class SettingsFragment : Fragment() {
                         startExportingData(event.uri)
                     }
                     SettingsEvents.showNoTransactionError -> "No transaction found to export data".showSnackBar()
-                    is SettingsEvents.openCityDivisionScreen -> navigateToCityDivisionFragment()
+                    SettingsEvents.openCityDivisionScreen -> navigateToCityDivisionFragment()
                 }
             }
         }

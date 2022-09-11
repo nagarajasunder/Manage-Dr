@@ -1,19 +1,14 @@
 package com.geekydroid.managedr.ui.settings.viewmodel
 
 import android.net.Uri
-import android.provider.Settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.geekydroid.managedr.ManageDrApp
-import com.geekydroid.managedr.ui.dataExport.DataExport
-import com.geekydroid.managedr.ui.settings.model.SettingsEditType
 import com.geekydroid.managedr.ui.settings.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import javax.inject.Inject
 
 private const val TAG = "SettingsViewmodel"
@@ -45,7 +40,7 @@ class SettingsViewmodel @Inject constructor(
 
     fun settingsEditableClicked() {
         viewModelScope.launch {
-            eventChannel.send(SettingsEvents.openCityDivisionScreen(SettingsEditType.EDIT_TYPE_DIVISION))
+            eventChannel.send(SettingsEvents.openCityDivisionScreen)
         }
     }
 
@@ -57,5 +52,5 @@ sealed class SettingsEvents
     object openFilePicker : SettingsEvents()
     data class exportDataToExcel(val uri: Uri):SettingsEvents()
     object showNoTransactionError : SettingsEvents()
-    data class openCityDivisionScreen(val editType:SettingsEditType) : SettingsEvents()
+    object openCityDivisionScreen : SettingsEvents()
 }

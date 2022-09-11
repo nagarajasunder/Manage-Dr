@@ -65,4 +65,6 @@
     <string name="data_export_channel_description">Show a persistant notification when the data export process is running</string>
     <string name="data_export_notification_title">Data export is in progress</string>
     <string name="data_export_completed_channel_description">Notify once the data export is completed</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="delete_dialog_message">All transactions associated with %s will also be deleted</string>
 </resources>

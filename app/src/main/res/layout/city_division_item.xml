@@ -3,9 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.geekydroid.managedr.ui.settings.model.ActionType"/>
         <variable
             name="model"
             type="com.geekydroid.managedr.ui.settings.model.SettingsEditData" />
+        <variable
+            name="listener"
+            type="com.geekydroid.managedr.utils.UiOnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,11 +30,12 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:onClick="@{() -> listener.onClick(ActionType.ACTION_TYPE_EDIT,model)}"
             android:background="?android:attr/selectableItemBackground"
             app:layout_constraintEnd_toStartOf="@+id/iv_delete"
             style="@style/textViewRegular"/>
 
-        <androidx.constraintlayout.utils.widget.ImageFilterView
+        <ImageView
             android:id="@+id/iv_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,9 +46,10 @@
             android:layout_marginEnd="8dp"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="@{() -> listener.onClick(ActionType.ACTION_TYPE_DELETE,model)}"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:tint="@color/currency_red"
-            app:layout_constraintStart_toEndOf="@+id/tv_name"/>
+            app:layout_constraintStart_toEndOf="@+id/tv_name"
+            app:tint="@color/currency_red" />
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
