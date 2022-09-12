@@ -116,12 +116,12 @@ class CityDivisionFragment : Fragment(),UiOnClickListener {
             }
         }
 
-        binding.chipNewCity.setOnClickListener {
-            showAddNewItemDialog(DialogInputType.CITY)
-        }
-        binding.chipNewDivision.setOnClickListener {
-            showAddNewItemDialog(DialogInputType.DIVISION)
-        }
+//        binding.chipNewCity.setOnClickListener {
+//            showAddNewItemDialog(DialogInputType.CITY)
+//        }
+//        binding.chipNewDivision.setOnClickListener {
+//            showAddNewItemDialog(DialogInputType.DIVISION)
+//        }
     }
 
     private fun showAddNewItemDialog(type: DialogInputType) {

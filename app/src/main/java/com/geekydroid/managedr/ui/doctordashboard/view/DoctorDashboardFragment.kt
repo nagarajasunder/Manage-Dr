@@ -220,14 +220,21 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
     }
 
     private fun navigateToNewCollectionFragment() {
-        val action = DoctorDashboardFragmentDirections.actionDoctorDashboardFragmentToNewServiceFragment(doctorId,TransactionType.COLLECTION)
-        findNavController().navigate(action)
+        val cityId:Int = viewmodel.getDoctorCityId()
+        if (cityId != -1)
+        {
+            val action = DoctorDashboardFragmentDirections.actionDoctorDashboardFragmentToNewServiceFragment(doctorId,TransactionType.COLLECTION,cityId)
+            findNavController().navigate(action)
+        }
     }
 
     private fun navigateToNewServiceFragment() {
-        View.GONE
-        val action = DoctorDashboardFragmentDirections.actionDoctorDashboardFragmentToNewServiceFragment(doctorId,TransactionType.SERVICE)
-        findNavController().navigate(action)
+        val cityId = viewmodel.getDoctorCityId()
+        if (cityId != -1)
+        {
+            val action = DoctorDashboardFragmentDirections.actionDoctorDashboardFragmentToNewServiceFragment(doctorId,TransactionType.SERVICE,cityId)
+            findNavController().navigate(action)
+        }
     }
 
     private fun updateDoctorData(doctorData:HomeScreenDoctorData? = null) {

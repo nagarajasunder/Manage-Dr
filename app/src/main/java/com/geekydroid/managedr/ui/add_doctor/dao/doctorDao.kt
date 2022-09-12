@@ -30,6 +30,7 @@ interface doctorDao {
     //Data to be displayed in the home screen
     @Query(
         "SELECT doctor_id as doctorID, " +
+                "city_id as cityId, " +
                 "doctor_name as doctorName, " +
                 "hospital_name as hospitalName, " +
                 "doctor_mobile_number as doctorMobileNumber, " +
@@ -42,6 +43,7 @@ interface doctorDao {
 
     @Query(
         "SELECT doctor_id as doctorID, " +
+                "city_id as cityId, " +
                 "doctor_name as doctorName, " +
                 "hospital_name as hospitalName, " +
                 "doctor_mobile_number as doctorMobileNumber, " +
@@ -54,6 +56,7 @@ interface doctorDao {
 
     @Query(
         "SELECT doctor_id as doctorID, " +
+                "city_id as cityId, " +
                 "doctor_name as doctorName, " +
                 "hospital_name as hospitalName, " +
                 "doctor_mobile_number as doctorMobileNumber, " +
@@ -67,6 +70,7 @@ interface doctorDao {
 
     @Query(
         "SELECT doctor_id as doctorID, " +
+                "city_id as cityId, " +
                 "doctor_name as doctorName, " +
                 "hospital_name as hospitalName, " +
                 "doctor_mobile_number as doctorMobileNumber, " +
@@ -79,6 +83,7 @@ interface doctorDao {
 
     @Query(
         "SELECT doctor_id as doctorID, " +
+                "city_id as cityId, " +
                 "doctor_name as doctorName, " +
                 "hospital_name as hospitalName, " +
                 "doctor_mobile_number as doctorMobileNumber, " +
@@ -92,6 +97,7 @@ interface doctorDao {
     //Data to be displayed in the doctor dashboard
     @Query(
         "SELECT doctor_id as doctorID, " +
+                "city_id as cityId, " +
                 "doctor_name as doctorName, " +
                 "hospital_name as hospitalName, " +
                 "doctor_mobile_number as doctorMobileNumber, " +
