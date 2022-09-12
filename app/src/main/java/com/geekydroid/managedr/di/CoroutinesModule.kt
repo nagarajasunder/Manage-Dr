@@ -18,8 +18,16 @@ object CoroutinesModule {
     @Provides
     fun providesApplicationScope():CoroutineScope = CoroutineScope(SupervisorJob())
 
+    @ServiceScope
+    @Provides
+    fun providesServiceScope():CoroutineScope = CoroutineScope(SupervisorJob())
+
 }
 
 @Retention(AnnotationRetention.RUNTIME)
 @Qualifier
 annotation class ApplicationScope
+
+@Retention(AnnotationRetention.RUNTIME)
+@Qualifier
+annotation class ServiceScope

@@ -8,6 +8,7 @@ import java.text.DateFormat
 
 data class HomeScreenDoctorData(
     val doctorID: Int = 0,
+    val cityId:Int = 0,
     val doctorName: String = "",
     val hospitalName: String = "",
     val doctorMobileNumber:String = "",

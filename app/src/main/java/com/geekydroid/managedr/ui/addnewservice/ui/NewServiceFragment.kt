@@ -1,7 +1,6 @@
 package com.geekydroid.managedr.ui.addnewservice.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -38,12 +37,11 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
     private val args: NewServiceFragmentArgs by navArgs()
     private var doctorId: Int = -1
     private lateinit var newDivisionFragment: NewDivisionFragment
-    private lateinit var citySpinnerAdapter: ArrayAdapter<String>
     private lateinit var divisionSpinnerAdapter: ArrayAdapter<String>
-    private var citySpinnerList: MutableList<String> = mutableListOf("Select a city")
     private var divisionSpinnerList: MutableList<String> = mutableListOf("Select a division")
     private lateinit var host: MenuHost
     private lateinit var transactionType: TransactionType
+    private var doctorCityId: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,15 +57,14 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
         host = requireActivity()
         doctorId = args.doctorId
         transactionType = args.transactionType
+        doctorCityId = args.cityId
         binding.viewmodel = viewmodel
         binding.transactionType = transactionType
         binding.lifecycleOwner = viewLifecycleOwner
         viewmodel.getDoctorName(doctorId)
+        viewmodel.setDoctorCity(doctorCityId)
         setUI()
         observeUiEvents()
-        viewmodel.cityData.observe(viewLifecycleOwner) { cities ->
-            setupCitySpinner(cities.map { it.cityName })
-        }
         viewmodel.categoryData.observe(viewLifecycleOwner) { categories ->
             setupDivisionSpinner(categories.map { it.categoryName })
         }
@@ -92,10 +89,6 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
     }
 
     private fun setUI() {
-        (binding.spinnerCity.editText as AutoCompleteTextView).onItemClickListener =
-            AdapterView.OnItemClickListener { _, _, index, _ ->
-                viewmodel.updateSelectedCity(index)
-            }
 
         (binding.spinnerCategory.editText as AutoCompleteTextView).onItemClickListener =
             AdapterView.OnItemClickListener { _, _, index, _ ->
@@ -115,29 +108,14 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
         }
     }
 
-    private fun setupCitySpinner(list: List<String>) {
-        citySpinnerList.clear()
-        citySpinnerList.addAll(list)
-        citySpinnerAdapter = ArrayAdapter<String>(requireContext(),
-            android.R.layout.simple_dropdown_item_1line,
-            citySpinnerList)
-        if (viewmodel.selectedCityIndex != -1) {
-            (binding.spinnerCity.editText as AutoCompleteTextView).setText(citySpinnerList[viewmodel.selectedCityIndex])
-        }
-        (binding.spinnerCity.editText as AutoCompleteTextView).setAdapter(citySpinnerAdapter)
-    }
+
 
     private fun observeUiEvents() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewmodel.newServiceEvents.collect {
                 when (it) {
                     NewServiceFragmentEvents.showDatePickerDialog -> openDatePicker()
-                    NewServiceFragmentEvents.showNewCategoryDialog -> showBottomSheetDialog(
-                        DialogInputType.DIVISION
-                    )
-                    NewServiceFragmentEvents.showNewCityDialog -> showBottomSheetDialog(
-                        DialogInputType.CITY
-                    )
+                    NewServiceFragmentEvents.showNewCategoryDialog -> showBottomSheetDialog()
                     NewServiceFragmentEvents.newServiceCreated -> {
                         showSnackbar(requireContext().getString(R.string.new_service_created))
                         findNavController().navigateUp()
@@ -147,7 +125,6 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
                         findNavController().navigateUp()
                     }
                     NewServiceFragmentEvents.selectCategoryError -> showCategorySpinnerError()
-                    NewServiceFragmentEvents.selectCityError -> showCitySpinnerError()
                     NewServiceFragmentEvents.transactionAmountError -> showTransactionAmountError()
                     NewServiceFragmentEvents.dismissNewDivisionDialog -> dismissNewDivisionDialog()
                     is NewServiceFragmentEvents.showDuplicateWarningInDialog -> showDuplicateWarning(
@@ -176,9 +153,6 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
             requireContext().getString(R.string.error_please_select_division)
     }
 
-    private fun showCitySpinnerError() {
-        binding.spinnerCity.error = requireContext().getString(R.string.error_please_select_a_city)
-    }
 
     private fun openDatePicker() {
         val constraintsBuilder = CalendarConstraints.Builder()
@@ -190,19 +164,11 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
         datePicker.show(requireActivity().supportFragmentManager, "datepicker")
     }
 
-    private fun showBottomSheetDialog(type: DialogInputType) {
+    private fun showBottomSheetDialog() {
         val bundle = Bundle()
-        when (type) {
-            DialogInputType.DIVISION -> {
-                bundle.putString("title", "Add new division")
-                bundle.putString("hint", "Division name")
-            }
-            DialogInputType.CITY -> {
-                bundle.putString("title", "Add new City")
-                bundle.putString("hint", "City name")
-            }
-        }
-        bundle.putString("inputType", type.toString())
+        bundle.putString("title", "Add new division")
+        bundle.putString("hint", "Division name")
+        bundle.putString("inputType", DialogInputType.DIVISION.name)
         requireActivity().supportFragmentManager.let {
             newDivisionFragment = NewDivisionFragment.newInstance(bundle, this).apply {
                 show(it, "NewDivisionFragment")
@@ -214,12 +180,7 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
     override fun onClickDialog(vararg args: Any) {
         val input = (args[0] as String)
         val dialogType = (args[1] as String)
-        if (dialogType == DialogInputType.CITY.toString()) {
-            viewmodel.isCityDuplicate(input)
-        } else {
-            viewmodel.isDuplicateDivision(input)
-        }
-
+        viewmodel.isDuplicateDivision(input)
     }
 
     private fun showDuplicateWarning(input: String) {

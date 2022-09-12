@@ -20,7 +20,7 @@
     <string name="text_add_service">Add Service</string>
     <string name="text_add_return">Add Return</string>
     <string name="enter_transaction_amount">Transaction amount</string>
-    <string name="hint_add_new_category">Add new category</string>
+    <string name="hint_add_new_category">Add new division</string>
     <string name="hint_add_new_city">Add new city</string>
     <string name="division_name">Division name</string>
     <string name="btn_text_add">Add</string>
@@ -56,4 +56,15 @@
     <string name="total_return">Total Return\n %1s</string>
     <string name="hint_birthday_date">birthday date</string>
     <string name="edit">edit</string>
+    <string name="settings">Settings</string>
+    <string name="categories">Divisions</string>
+    <string name="settings_editable">Divisions, Cities</string>
+    <string name="cities">Cities</string>
+    <string name="export_data">Export data</string>
+    <string name="import_data">Import existing data</string>
+    <string name="data_export_channel_description">Show a persistant notification when the data export process is running</string>
+    <string name="data_export_notification_title">Data export is in progress</string>
+    <string name="data_export_completed_channel_description">Notify once the data export is completed</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="delete_dialog_message">All transactions associated with %s will also be deleted</string>
 </resources>

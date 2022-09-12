@@ -312,6 +312,15 @@ class DoctorDashboardViewmodel @Inject constructor(private val repository: Docto
     fun onEditMenuItemClicked() = viewModelScope.launch {
         doctorDashboardEventsChannel.send(doctorDashboardEvents.navigateToEditDoctorScreen)
     }
+
+    fun getDoctorCityId():Int = _doctorData.value?.let {
+        when(it)
+        {
+            is Resource.Error -> -1
+            is Resource.Loading -> -1
+            is Resource.Success -> it.data?.cityId?:-1
+        }
+    }?:-1
 }
 
 sealed class doctorDashboardEvents {

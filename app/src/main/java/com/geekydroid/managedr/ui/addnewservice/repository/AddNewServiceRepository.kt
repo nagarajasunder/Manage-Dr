@@ -28,7 +28,6 @@ class AddNewServiceRepository @Inject constructor(
 
     fun getDoctorName(doctorId: Int) = doctorDao.getDoctorName(doctorId)
 
-    fun getAllCityNames(): Flow<List<MdrCity>> = cityDao.getAllCities()
 
     suspend fun addNewCity(city: MdrCity) = externalScope.launch(externalDispatcher) {
         cityDao.insertNewCity(city)

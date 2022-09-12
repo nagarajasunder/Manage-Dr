@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_homeFragment_to_doctorDashboardFragment"
             app:destination="@id/doctorDashboardFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addNewDoctorFragment"
@@ -48,5 +51,20 @@
         <argument
             android:name="transactionType"
             app:argType="com.geekydroid.managedr.application.TransactionType" />
+        <argument
+            android:name="cityId"
+            app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.geekydroid.managedr.ui.settings.ui.SettingsFragment"
+        android:label="SettingsFragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_cityDivisionFragment"
+            app:destination="@id/cityDivisionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cityDivisionFragment"
+        android:name="com.geekydroid.managedr.ui.settings.ui.CityDivisionFragment"
+        android:label="CityDivisionFragment" />
 </navigation>
