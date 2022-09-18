@@ -1,5 +1,6 @@
 package com.geekydroid.managedr.ui.addnewservice.ui
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
@@ -20,8 +21,8 @@ import com.geekydroid.managedr.databinding.FragmentNewServiceBinding
 import com.geekydroid.managedr.ui.addnewservice.viewmodel.AddNewServiceFragmentViewmodel
 import com.geekydroid.managedr.ui.addnewservice.viewmodel.NewServiceFragmentEvents
 import com.geekydroid.managedr.ui.dialogs.NewDivisionFragment
-import com.geekydroid.managedr.utils.DialogInputType
-import com.geekydroid.managedr.utils.GenericDialogOnClickListener
+import com.geekydroid.managedr.ui.settings.model.ActionType
+import com.geekydroid.managedr.utils.*
 import com.geekydroid.managedr.utils.uiutils.PickerUtils
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
@@ -41,6 +42,7 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
     private var divisionSpinnerList: MutableList<String> = mutableListOf("Select a division")
     private lateinit var host: MenuHost
     private lateinit var transactionType: TransactionType
+    private lateinit var actionType:ActionType
     private var doctorCityId: Int = -1
 
     override fun onCreateView(
@@ -57,10 +59,12 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
         host = requireActivity()
         doctorId = args.doctorId
         transactionType = args.transactionType
+        actionType = args.actionType
         doctorCityId = args.cityId
         binding.viewmodel = viewmodel
         binding.transactionType = transactionType
         binding.lifecycleOwner = viewLifecycleOwner
+        viewmodel.updateExistingTransactionId(args.existingTransactionId)
         viewmodel.getDoctorName(doctorId)
         viewmodel.setDoctorCity(doctorCityId)
         setUI()
@@ -90,6 +94,15 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
 
     private fun setUI() {
 
+        if (actionType == ActionType.ACTION_TYPE_EDIT)
+        {
+            binding.btnDeleteTransaction.visibility = View.VISIBLE
+        }
+        else
+        {
+            binding.btnDeleteTransaction.visibility = View.GONE
+        }
+
         (binding.spinnerCategory.editText as AutoCompleteTextView).onItemClickListener =
             AdapterView.OnItemClickListener { _, _, index, _ ->
                 viewmodel.updateSelectedCategory(index)
@@ -110,6 +123,7 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
 
 
 
+    @Suppress("IMPLICIT_CAST_TO_ANY")
     private fun observeUiEvents() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewmodel.newServiceEvents.collect {
@@ -127,12 +141,42 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
                     NewServiceFragmentEvents.selectCategoryError -> showCategorySpinnerError()
                     NewServiceFragmentEvents.transactionAmountError -> showTransactionAmountError()
                     NewServiceFragmentEvents.dismissNewDivisionDialog -> dismissNewDivisionDialog()
-                    is NewServiceFragmentEvents.showDuplicateWarningInDialog -> showDuplicateWarning(
-                        it.input)
+                    is NewServiceFragmentEvents.showDuplicateWarningInDialog -> {
+                        showDuplicateWarning(
+                            it.input)
+                    }
                     NewServiceFragmentEvents.transactionDateError -> showTransactionDateError()
-                }
+                    NewServiceFragmentEvents.showDeleteWarningDialog -> showDeleteDialog()
+                    NewServiceFragmentEvents.showTransactionDeletedMessage -> {
+                        showSnackbar(getString(R.string.transaction_delete_successfully))
+                        findNavController().navigateUp()
+                    }
+                }.exhaustive
             }
         }
+    }
+
+    private fun showDeleteDialog() {
+
+        createAlertDialog(requireContext(),
+            false,
+            getString(R.string.delete_transaction),
+            getString(R.string.delete_transaction_message),
+            getString(R.string.btn_text_ok),
+            getString(R.string.close),
+            object : dialogCallback {
+                override fun onPositiveButtonClick(dialog: DialogInterface) {
+                    viewmodel.deleteTransaction()
+                    dialog.dismiss()
+                }
+
+                override fun onNegativeButtonOnClick(dialog: DialogInterface) {
+                    dialog.dismiss()
+                }
+
+            })
+
+
     }
 
     private fun showSnackbar(message: String) {
@@ -179,7 +223,6 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
 
     override fun onClickDialog(vararg args: Any) {
         val input = (args[0] as String)
-        val dialogType = (args[1] as String)
         viewmodel.isDuplicateDivision(input)
     }
 

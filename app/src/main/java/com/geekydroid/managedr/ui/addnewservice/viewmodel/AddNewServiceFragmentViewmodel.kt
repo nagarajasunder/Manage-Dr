@@ -11,6 +11,7 @@ import com.geekydroid.managedr.ui.addnewservice.model.MdrCategory
 import com.geekydroid.managedr.ui.addnewservice.model.MdrCity
 import com.geekydroid.managedr.ui.addnewservice.model.MdrService
 import com.geekydroid.managedr.ui.addnewservice.repository.AddNewServiceRepository
+import com.geekydroid.managedr.ui.addnewservice.ui.NewServiceFragment
 import com.geekydroid.managedr.utils.DateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -24,6 +25,7 @@ import javax.inject.Inject
 class AddNewServiceFragmentViewmodel @Inject constructor(private val repository: AddNewServiceRepository) :
     ViewModel() {
 
+    private var existingTransactionId:Int = -1
     private var cityId:Int = -1
     private val newServiceEventsChannel: Channel<NewServiceFragmentEvents> = Channel()
     val newServiceEvents = newServiceEventsChannel.receiveAsFlow()
@@ -114,6 +116,13 @@ class AddNewServiceFragmentViewmodel @Inject constructor(private val repository:
         }
     }
 
+    fun onDeleteCtaClicked()
+    {
+        viewModelScope.launch {
+            newServiceEventsChannel.send(NewServiceFragmentEvents.showDeleteWarningDialog)
+        }
+    }
+
     private fun addNewService(doctorId:Int,transactionType:TransactionType) {
         viewModelScope.launch {
             val newService = MdrService(
@@ -149,6 +158,20 @@ class AddNewServiceFragmentViewmodel @Inject constructor(private val repository:
         cityId = doctorCityId
     }
 
+    fun deleteTransaction() {
+        viewModelScope.launch {
+            if (existingTransactionId != -1)
+            {
+                repository.deleteTransaction(existingTransactionId)
+                newServiceEventsChannel.send(NewServiceFragmentEvents.showTransactionDeletedMessage)
+            }
+        }
+    }
+
+    fun updateExistingTransactionId(transactionId: Int) {
+        existingTransactionId = transactionId
+    }
+
 
 }
 
@@ -162,4 +185,6 @@ sealed class NewServiceFragmentEvents {
     data class showDuplicateWarningInDialog(val input: String) : NewServiceFragmentEvents()
     object transactionDateError: NewServiceFragmentEvents()
     object newCollectionCreated:NewServiceFragmentEvents()
+    object showDeleteWarningDialog : NewServiceFragmentEvents()
+    object showTransactionDeletedMessage : NewServiceFragmentEvents()
 }

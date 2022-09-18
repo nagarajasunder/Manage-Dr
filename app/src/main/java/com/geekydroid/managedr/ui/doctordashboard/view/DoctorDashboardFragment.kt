@@ -1,11 +1,7 @@
 package com.geekydroid.managedr.ui.doctordashboard.view
 
-import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuProvider
@@ -20,16 +16,14 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.geekydroid.managedr.R
 import com.geekydroid.managedr.adapter.GenericAdapter
-import com.geekydroid.managedr.application.ScreenData
 import com.geekydroid.managedr.application.TransactionType
 import com.geekydroid.managedr.databinding.FragmentDoctorDashboardBinding
 import com.geekydroid.managedr.providers.Resource
 import com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData
-import com.geekydroid.managedr.ui.addnewservice.model.MdrCategory
-import com.geekydroid.managedr.ui.addnewservice.model.MdrCity
 import com.geekydroid.managedr.ui.doctordashboard.model.DoctorDashboardTxData
 import com.geekydroid.managedr.ui.doctordashboard.viewmodel.DoctorDashboardViewmodel
 import com.geekydroid.managedr.ui.doctordashboard.viewmodel.doctorDashboardEvents
+import com.geekydroid.managedr.ui.settings.model.ActionType
 import com.geekydroid.managedr.utils.UiOnClickListener
 import com.geekydroid.managedr.utils.uiutils.PickerUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,7 +42,7 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_doctor_dashboard,container,false)
         return binding.root
     }
@@ -94,7 +88,7 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
                 openDivisionSelectionDialog()
             }
         }
-        binding.txTypeGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+        binding.txTypeGroup.setOnCheckedStateChangeListener { _, checkedIds ->
             viewmodel.updateTxTypeFilter(checkedIds)
         }
     }
@@ -195,8 +189,12 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
             viewmodel.doctorDashboardEvent.collect{
                 when(it)
                 {
-                    doctorDashboardEvents.addNewCollectionClicked -> navigateToNewCollectionFragment()
-                    doctorDashboardEvents.addNewServiceClicked -> navigateToNewServiceFragment()
+                    doctorDashboardEvents.addNewCollectionClicked -> navigateToNewServiceFragment(
+                        actionType = ActionType.ACTION_TYPE_NEW,
+                        transactionTypeText = TransactionType.COLLECTION.name)
+                    doctorDashboardEvents.addNewServiceClicked -> navigateToNewServiceFragment(
+                        actionType = ActionType.ACTION_TYPE_NEW,
+                        transactionTypeText = TransactionType.SERVICE.name)
                     doctorDashboardEvents.showDateRangePicker -> openDateRangePicker()
                     doctorDashboardEvents.clearChipSelection -> clearChipSelection()
                     doctorDashboardEvents.navigateToEditDoctorScreen -> openEditDoctorScreen()
@@ -219,20 +217,24 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
         }
     }
 
-    private fun navigateToNewCollectionFragment() {
-        val cityId:Int = viewmodel.getDoctorCityId()
-        if (cityId != -1)
-        {
-            val action = DoctorDashboardFragmentDirections.actionDoctorDashboardFragmentToNewServiceFragment(doctorId,TransactionType.COLLECTION,cityId)
-            findNavController().navigate(action)
-        }
-    }
+    private fun navigateToNewServiceFragment(
+        actionType: ActionType = ActionType.ACTION_TYPE_NEW,
+        transactionId: Int = -1,
+        transactionTypeText: String = TransactionType.SERVICE.name
+    ) {
 
-    private fun navigateToNewServiceFragment() {
+        val transactionType = if (transactionTypeText == TransactionType.SERVICE.name)
+        {
+            TransactionType.SERVICE
+        }
+        else
+        {
+            TransactionType.COLLECTION
+        }
         val cityId = viewmodel.getDoctorCityId()
         if (cityId != -1)
         {
-            val action = DoctorDashboardFragmentDirections.actionDoctorDashboardFragmentToNewServiceFragment(doctorId,TransactionType.SERVICE,cityId)
+            val action = DoctorDashboardFragmentDirections.actionDoctorDashboardFragmentToNewServiceFragment(doctorId,transactionType,cityId,transactionId,actionType)
             findNavController().navigate(action)
         }
     }
@@ -244,7 +246,11 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
     }
 
     override fun onClick(vararg args: Any) {
-
+        val model = args[0]
+        if (model is DoctorDashboardTxData)
+        {
+            navigateToNewServiceFragment(ActionType.ACTION_TYPE_EDIT,model.transactionId,model.transactionType)
+        }
     }
 
 }

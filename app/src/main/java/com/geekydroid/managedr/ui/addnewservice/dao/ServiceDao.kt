@@ -59,4 +59,7 @@ interface ServiceDao {
 
     @Query("SELECT COUNT(service_id) FROM MDR_SERVICE")
     suspend fun getTransactionCount():Int
+
+    @Query("DELETE FROM MDR_SERVICE WHERE service_id = :transactionId")
+    suspend fun deleteTransactionById(transactionId: Int)
 }

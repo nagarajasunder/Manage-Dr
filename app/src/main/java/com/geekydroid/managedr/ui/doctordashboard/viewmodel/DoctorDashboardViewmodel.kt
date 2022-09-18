@@ -107,6 +107,10 @@ class DoctorDashboardViewmodel @Inject constructor(private val repository: Docto
                     .sumOf { it.transactionAmount })
             _totalAmountPair.value = Pair(serivceTotalStr, returnTotalStr)
         }
+        else
+        {
+            _totalAmountPair.value = Pair(TextUtils.getCurrencyFormat(0.0),TextUtils.getCurrencyFormat(0.0))
+        }
     }
 
     private fun getAllCities() = viewModelScope.launch {

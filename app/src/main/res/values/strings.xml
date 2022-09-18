@@ -67,4 +67,9 @@
     <string name="data_export_completed_channel_description">Notify once the data export is completed</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="delete_dialog_message">All transactions associated with %s will also be deleted</string>
+    <string name="content_desc_delete">delete</string>
+    <string name="delete_transaction">Delete Transaction</string>
+    <string name="close">Close</string>
+    <string name="delete_transaction_message">Are you sure to delete this transaction?</string>
+    <string name="transaction_delete_successfully">Transaction deleted successfully</string>
 </resources>

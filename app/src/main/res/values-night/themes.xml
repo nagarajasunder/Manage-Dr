@@ -80,6 +80,11 @@
         <item name="boxCollapsedPaddingTop">0dp</item>
     </style>
 
+    <style name="delete_button_style" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/delete_cta_color</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:drawableEnd">@drawable/delete_icon_cta</item>
+    </style>
 
 
 </resources>
