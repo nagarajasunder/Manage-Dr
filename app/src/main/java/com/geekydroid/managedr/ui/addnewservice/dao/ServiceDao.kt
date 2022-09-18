@@ -1,10 +1,7 @@
 package com.geekydroid.managedr.ui.addnewservice.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
+import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
-import androidx.room.Query
-import androidx.room.RawQuery
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.geekydroid.managedr.ui.addnewservice.model.MdrService
 import com.geekydroid.managedr.ui.doctordashboard.model.DashboardFilters
@@ -62,4 +59,10 @@ interface ServiceDao {
 
     @Query("DELETE FROM MDR_SERVICE WHERE service_id = :transactionId")
     suspend fun deleteTransactionById(transactionId: Int)
+
+    @Query("SELECT * FROM MDR_SERVICE WHERE service_id = :transactionId")
+    fun getTransactionDetailsById(transactionId: Int):Flow<MdrService>
+
+    @Update
+    suspend fun updateService(serviceDetails: MdrService)
 }

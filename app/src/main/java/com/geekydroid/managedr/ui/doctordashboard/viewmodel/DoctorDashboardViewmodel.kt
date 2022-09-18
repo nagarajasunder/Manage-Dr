@@ -23,8 +23,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val TAG = "DoctorDashboardViewmode"
-
 @HiltViewModel
 class DoctorDashboardViewmodel @Inject constructor(private val repository: DoctorDashboardRepository) :
     ViewModel() {

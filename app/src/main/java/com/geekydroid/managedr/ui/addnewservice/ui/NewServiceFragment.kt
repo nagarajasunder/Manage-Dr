@@ -81,7 +81,7 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
                     R.id.cta_save -> {
-                        viewmodel.onSaveCtaClicked(doctorId, transactionType)
+                        viewmodel.onSaveCtaClicked(doctorId, transactionType,actionType)
                         return true
                     }
                 }
@@ -94,13 +94,24 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
 
     private fun setUI() {
 
-        if (actionType == ActionType.ACTION_TYPE_EDIT)
-        {
+        if (actionType == ActionType.ACTION_TYPE_EDIT) {
             binding.btnDeleteTransaction.visibility = View.VISIBLE
-        }
-        else
-        {
+        } else {
             binding.btnDeleteTransaction.visibility = View.GONE
+        }
+
+        if (actionType == ActionType.ACTION_TYPE_EDIT) {
+            if (transactionType == TransactionType.SERVICE) {
+                binding.tvHeading.text = getString(R.string.edit_service)
+            } else {
+                binding.tvHeading.text = getString(R.string.edit_return)
+            }
+        } else {
+            if (transactionType == TransactionType.SERVICE) {
+                binding.tvHeading.text = getString(R.string.add_service)
+            } else {
+                binding.tvHeading.text = getString(R.string.add_collection)
+            }
         }
 
         (binding.spinnerCategory.editText as AutoCompleteTextView).onItemClickListener =
@@ -117,7 +128,7 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
             divisionSpinnerList)
         (binding.spinnerCategory.editText as AutoCompleteTextView).setAdapter(divisionSpinnerAdapter)
         if (viewmodel.selectedCategoryIndex != -1) {
-            (binding.spinnerCategory.editText as AutoCompleteTextView).setText(divisionSpinnerList[viewmodel.selectedCategoryIndex])
+            (binding.spinnerCategory.editText as AutoCompleteTextView).setText(divisionSpinnerList[viewmodel.selectedCategoryIndex],false)
         }
     }
 
@@ -138,21 +149,45 @@ class NewServiceFragment : Fragment(), GenericDialogOnClickListener {
                         showSnackbar(requireContext().getString(R.string.new_collection_created))
                         findNavController().navigateUp()
                     }
-                    NewServiceFragmentEvents.selectCategoryError -> showCategorySpinnerError()
-                    NewServiceFragmentEvents.transactionAmountError -> showTransactionAmountError()
-                    NewServiceFragmentEvents.dismissNewDivisionDialog -> dismissNewDivisionDialog()
+                    NewServiceFragmentEvents.selectCategoryError -> {
+                        showCategorySpinnerError()
+                    }
+                    NewServiceFragmentEvents.transactionAmountError -> {
+                        showTransactionAmountError()
+                    }
+                    NewServiceFragmentEvents.dismissNewDivisionDialog -> {
+                        dismissNewDivisionDialog()
+                    }
                     is NewServiceFragmentEvents.showDuplicateWarningInDialog -> {
                         showDuplicateWarning(
                             it.input)
                     }
-                    NewServiceFragmentEvents.transactionDateError -> showTransactionDateError()
-                    NewServiceFragmentEvents.showDeleteWarningDialog -> showDeleteDialog()
+                    NewServiceFragmentEvents.transactionDateError -> {
+                        showTransactionDateError()
+                    }
+                    NewServiceFragmentEvents.showDeleteWarningDialog -> {
+                        showDeleteDialog()
+                    }
                     NewServiceFragmentEvents.showTransactionDeletedMessage -> {
                         showSnackbar(getString(R.string.transaction_delete_successfully))
                         findNavController().navigateUp()
                     }
+                    is NewServiceFragmentEvents.prefillDivisionName -> {
+                        prefillDivisionName(it.index)
+                    }
+                    NewServiceFragmentEvents.showTransactionUpdatedMessage -> {
+                        showSnackbar(getString(R.string.transaction_updated_successfully))
+                        findNavController().navigateUp()
+                    }
                 }.exhaustive
             }
+        }
+    }
+
+    private fun prefillDivisionName(index:Int) {
+        if (divisionSpinnerList.isNotEmpty())
+        {
+            (binding.spinnerCategory.editText as AutoCompleteTextView).setText(divisionSpinnerList[index],false)
         }
     }
 

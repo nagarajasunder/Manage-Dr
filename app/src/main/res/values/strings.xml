@@ -72,4 +72,7 @@
     <string name="close">Close</string>
     <string name="delete_transaction_message">Are you sure to delete this transaction?</string>
     <string name="transaction_delete_successfully">Transaction deleted successfully</string>
+    <string name="edit_service">Edit Service</string>
+    <string name="edit_return">Edit Return</string>
+    <string name="transaction_updated_successfully">Transaction updated successfully</string>
 </resources>

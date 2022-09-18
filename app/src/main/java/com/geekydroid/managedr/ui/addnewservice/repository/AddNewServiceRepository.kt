@@ -46,4 +46,9 @@ class AddNewServiceRepository @Inject constructor(
         serviceDao.deleteTransactionById(existingTransactionId)
     }.join()
 
+    fun getTransactionById(transactionId: Int) = serviceDao.getTransactionDetailsById(transactionId)
+    suspend fun updateService(serviceDetails: MdrService) = externalScope.launch(externalDispatcher) {
+        serviceDao.updateService(serviceDetails)
+    }
+
 }
