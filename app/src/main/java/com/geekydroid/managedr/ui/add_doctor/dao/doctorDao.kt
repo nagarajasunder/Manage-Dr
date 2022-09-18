@@ -1,9 +1,6 @@
 package com.geekydroid.managedr.ui.add_doctor.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData
 import com.geekydroid.managedr.ui.add_doctor.model.MdrDoctor
 import com.geekydroid.managedr.ui.add_doctor.model.SortPreferences
@@ -116,6 +113,16 @@ interface doctorDao {
 
     @Update
     suspend fun updateDoctor(doctor: MdrDoctor)
+
+    @Transaction
+    suspend fun updateDoctorAndTransactions(doctor: MdrDoctor)
+    {
+        updateDoctor(doctor)
+        updateDoctorTransactions(doctor.cityId,doctor.doctorID)
+    }
+
+    @Query("UPDATE MDR_SERVICE SET city_id = :cityId WHERE serviced_doctor_id = :doctorId")
+    fun updateDoctorTransactions(cityId: Int,doctorId: Int)
 
 
 }

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -61,8 +62,8 @@ class AddNewDoctorFragment : Fragment(), GenericDialogOnClickListener {
 
         setUI()
         observeUiEVents()
-        viewmodel.cityData.observe(viewLifecycleOwner) { categories ->
-            setupCitySpinner(categories.map { it.cityName })
+        viewmodel.cityData.observe(viewLifecycleOwner) { cities ->
+            setupCitySpinner(cities.map { it.cityName })
         }
 
         host.addMenuProvider(object : MenuProvider {
@@ -89,7 +90,7 @@ class AddNewDoctorFragment : Fragment(), GenericDialogOnClickListener {
             citySpinnerList)
         (binding.spinnerCity.editText as AutoCompleteTextView).setAdapter(citySpinnerAdapter)
         if (viewmodel.selectedCityIndex != -1) {
-            (binding.spinnerCity.editText as AutoCompleteTextView).setText(citySpinnerList[viewmodel.selectedCityIndex])
+            (binding.spinnerCity.editText as AutoCompleteTextView).setText(citySpinnerList[viewmodel.selectedCityIndex],false)
         }
     }
 
@@ -135,7 +136,7 @@ class AddNewDoctorFragment : Fragment(), GenericDialogOnClickListener {
     private fun prefillDoctorCity(selectedCityIndex: Int) {
         if (citySpinnerList.size >= selectedCityIndex)
         {
-            (binding.spinnerCity.editText as AutoCompleteTextView).setText(citySpinnerList[selectedCityIndex])
+            (binding.spinnerCity.editText as AutoCompleteTextView).setText(citySpinnerList[selectedCityIndex],false)
         }
     }
 

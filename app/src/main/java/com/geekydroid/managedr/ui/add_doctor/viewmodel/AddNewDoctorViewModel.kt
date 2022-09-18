@@ -132,7 +132,8 @@ class AddNewDoctorViewModel @Inject constructor(private val repository: DoctorRe
 
     private suspend fun updateDoctor() {
         existingDoctor?.let { doctor ->
-            repository.updateDoctor(doctor.copy(
+            repository.updateDoctor(
+                doctor.copy(
                 doctorName = TextUtils.trimText(doctorName.value ?: ""),
                 cityId = cityData.value!![selectedCityIndex].cityId,
                 dateOfBirth = DateUtils.fromLongToDate(dateOfBirthLong),

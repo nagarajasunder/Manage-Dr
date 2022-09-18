@@ -27,7 +27,7 @@ class DoctorRepository @Inject constructor(
     }.join()
 
     fun getDoctorById(doctorId: Int) = dao.getDoctorById(doctorId)
-    suspend fun updateDoctor(doctor: MdrDoctor) = dao.updateDoctor(doctor)
+    suspend fun updateDoctor(doctor: MdrDoctor) = dao.updateDoctorAndTransactions(doctor)
     suspend fun addNewCity(newCity: MdrCity) = cityDao.insertNewCity(newCity)
     fun getAllCities() : Flow<List<MdrCity>> = cityDao.getAllCities()
 
