@@ -54,6 +54,12 @@
         <argument
             android:name="cityId"
             app:argType="integer" />
+        <argument
+            android:name="existingTransactionId"
+            app:argType="integer" />
+        <argument
+            android:name="actionType"
+            app:argType="com.geekydroid.managedr.ui.settings.model.ActionType" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

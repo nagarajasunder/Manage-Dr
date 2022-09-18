@@ -23,8 +23,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val TAG = "DoctorDashboardViewmode"
-
 @HiltViewModel
 class DoctorDashboardViewmodel @Inject constructor(private val repository: DoctorDashboardRepository) :
     ViewModel() {
@@ -106,6 +104,10 @@ class DoctorDashboardViewmodel @Inject constructor(private val repository: Docto
                 TextUtils.getCurrencyFormat(data.filter { it.transactionType == TransactionType.COLLECTION.name }
                     .sumOf { it.transactionAmount })
             _totalAmountPair.value = Pair(serivceTotalStr, returnTotalStr)
+        }
+        else
+        {
+            _totalAmountPair.value = Pair(TextUtils.getCurrencyFormat(0.0),TextUtils.getCurrencyFormat(0.0))
         }
     }
 

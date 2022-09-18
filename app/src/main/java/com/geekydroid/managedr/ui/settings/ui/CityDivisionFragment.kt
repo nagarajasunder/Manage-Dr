@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -22,9 +21,7 @@ import com.geekydroid.managedr.ui.settings.model.ActionType
 import com.geekydroid.managedr.ui.settings.model.SettingsEditData
 import com.geekydroid.managedr.ui.settings.viewmodel.CityDivisionFragmentEvents
 import com.geekydroid.managedr.ui.settings.viewmodel.CityDivisionViewModel
-import com.geekydroid.managedr.utils.DialogInputType
-import com.geekydroid.managedr.utils.GenericDialogOnClickListener
-import com.geekydroid.managedr.utils.UiOnClickListener
+import com.geekydroid.managedr.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "CityDivisionFragment"
@@ -102,7 +99,7 @@ class CityDivisionFragment : Fragment(),UiOnClickListener {
         binding.settingsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.settingsRecyclerView.setHasFixedSize(true)
         adapter = GenericAdapter(this,R.layout.city_division_item)
-        binding.chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+        binding.chipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
             if (checkedIds.isNotEmpty())
             {
                 if (checkedIds[0] == R.id.chip_cities)
@@ -167,24 +164,43 @@ class CityDivisionFragment : Fragment(),UiOnClickListener {
                 {
                     ActionType.ACTION_TYPE_EDIT -> showEditDialog(data)
                     ActionType.ACTION_TYPE_DELETE -> showDeleteDialog(data)
-                }
+                    ActionType.ACTION_TYPE_NEW -> {}
+                }.exhaustive
             }
         }
     }
 
     private fun showDeleteDialog(data: SettingsEditData) {
-        val deleteAlertDialog = AlertDialog.Builder(requireContext())
-        deleteAlertDialog.setCancelable(false)
-        deleteAlertDialog.setTitle(getString(R.string.are_you_sure))
-            .setMessage(getString(R.string.delete_dialog_message,data.name))
-            .setPositiveButton(getString(R.string.btn_text_ok)) { dialog, _ ->
-                viewModel.deleteData(data)
-                dialog.dismiss()
-            }
-            .setNegativeButton("Close"
-            ) { dialog, _ ->
-                dialog.dismiss()
-            }.show()
+
+        createAlertDialog(requireContext(),
+            false,
+            getString(R.string.are_you_sure),
+            getString(R.string.delete_dialog_message, data.name),
+            getString(R.string.btn_text_ok),
+            getString(R.string.close),
+            object : dialogCallback {
+                override fun onPositiveButtonClick(dialog: DialogInterface) {
+                    viewModel.deleteData(data)
+                    dialog.dismiss()
+                }
+
+                override fun onNegativeButtonOnClick(dialog: DialogInterface) {
+                    dialog.dismiss()
+                }
+
+            })
+
+//        val deleteAlertDialog = AlertDialog.Builder(requireContext())
+//        deleteAlertDialog.setCancelable(false)
+//        deleteAlertDialog.setTitle(getString(R.string.are_you_sure))
+//            .setMessage()
+//            .setPositiveButton() { dialog, _ ->
+//
+//            }
+//            .setNegativeButton("Close"
+//            ) { dialog, _ ->
+//
+//            }.show()
     }
 
     private fun showEditDialog(data: SettingsEditData) {

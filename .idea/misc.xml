@@ -8,6 +8,8 @@
         <entry key="app/src/main/res/drawable/cake.xml" value="0.1865" />
         <entry key="app/src/main/res/drawable/calendar_icon.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/clear.xml" value="0.1865" />
+        <entry key="app/src/main/res/drawable/delete.xml" value="0.2805" />
+        <entry key="app/src/main/res/drawable/delete_icon_cta.xml" value="0.2805" />
         <entry key="app/src/main/res/drawable/doctor_icon.xml" value="0.244" />
         <entry key="app/src/main/res/drawable/edit.xml" value="0.1865" />
         <entry key="app/src/main/res/drawable/expand.xml" value="0.1865" />
