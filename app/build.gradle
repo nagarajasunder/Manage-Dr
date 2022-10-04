@@ -104,7 +104,7 @@ dependencies {
     implementation 'com.github.SUPERCILEX.poi-android:poi:3.17'
     compileOnly 'org.apache.poi:poi-ooxml:3.17'
 
-
-
-
+    //Lottie Animation
+    def lottieVersion = "3.4.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 }

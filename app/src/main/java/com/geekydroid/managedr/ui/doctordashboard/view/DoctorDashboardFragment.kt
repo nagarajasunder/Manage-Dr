@@ -157,7 +157,21 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
     private fun updateList(data: List<DoctorDashboardTxData>?) {
         data?.let {
             adapter.submitList(it)
+            if (it.isEmpty())
+            {
+                changeAnimationVisibility(View.VISIBLE)
+            }
+            else
+            {
+                changeAnimationVisibility(View.GONE)
+            }
         }
+    }
+
+    private fun changeAnimationVisibility(state: Int)
+    {
+        binding.emptyTransactionAnim.visibility = state
+        binding.tvEmptyTransactionText.visibility = state
     }
 
     private fun setUI() {

@@ -75,4 +75,6 @@
     <string name="edit_service">Edit Service</string>
     <string name="edit_return">Edit Return</string>
     <string name="transaction_updated_successfully">Transaction updated successfully</string>
+    <string name="no_doctors_found">No Doctors Found!</string>
+    <string name="no_transactions_found">No transactions found!</string>
 </resources>

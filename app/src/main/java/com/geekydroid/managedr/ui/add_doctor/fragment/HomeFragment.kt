@@ -14,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.geekydroid.managedr.R
 import com.geekydroid.managedr.adapter.GenericAdapter
-import com.geekydroid.managedr.application.ScreenData
 import com.geekydroid.managedr.databinding.FragmentHomeBinding
 import com.geekydroid.managedr.providers.Resource
 import com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData
@@ -63,6 +62,11 @@ class HomeFragment : Fragment(),UiOnClickListener {
         binding.fabAddNewDoctor.setOnClickListener {
             viewmodel.onFabClicked()
         }
+    }
+
+    private fun changeAnimationVisibility(state: Int) {
+        binding.emptyListAnim.visibility = state
+        binding.tvEmptyListText.visibility = state
     }
 
     private fun observeUiEvents() {
@@ -125,9 +129,14 @@ class HomeFragment : Fragment(),UiOnClickListener {
         },viewLifecycleOwner,Lifecycle.State.RESUMED)
     }
 
-    private fun setupAdapter(data:List<HomeScreenDoctorData>? = null) {
+    private fun setupAdapter(data: List<HomeScreenDoctorData>? = null) {
         data?.let {
             adapter.submitList(it)
+            if (it.isEmpty()) {
+                changeAnimationVisibility(View.VISIBLE)
+            } else {
+                changeAnimationVisibility(View.GONE)
+            }
         }
     }
 
