@@ -48,6 +48,10 @@ class NewDivisionFragment : BottomSheetDialogFragment() {
             validateInput(input)
         }
 
+        binding.btnCancel.setOnClickListener {
+            dismissDialog()
+        }
+
     }
 
     private fun validateInput(input: String?) {

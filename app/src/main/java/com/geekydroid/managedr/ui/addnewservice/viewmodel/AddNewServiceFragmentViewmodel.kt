@@ -1,6 +1,5 @@
 package com.geekydroid.managedr.ui.addnewservice.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.geekydroid.managedr.application.TransactionType
 import com.geekydroid.managedr.providers.DateFormatProvider
 import com.geekydroid.managedr.ui.addnewservice.model.MdrCategory
-import com.geekydroid.managedr.ui.addnewservice.model.MdrCity
 import com.geekydroid.managedr.ui.addnewservice.model.MdrService
 import com.geekydroid.managedr.ui.addnewservice.repository.AddNewServiceRepository
+import com.geekydroid.managedr.ui.settings.model.ActionType
 import com.geekydroid.managedr.utils.DateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -24,12 +23,11 @@ import javax.inject.Inject
 class AddNewServiceFragmentViewmodel @Inject constructor(private val repository: AddNewServiceRepository) :
     ViewModel() {
 
-
+    private var existingTransactionId:Int = -1
+    private var existingTransactionDetails:MutableLiveData<MdrService> = MutableLiveData()
+    private var cityId:Int = -1
     private val newServiceEventsChannel: Channel<NewServiceFragmentEvents> = Channel()
     val newServiceEvents = newServiceEventsChannel.receiveAsFlow()
-
-    private val _cityData: MutableLiveData<List<MdrCity>> = MutableLiveData(listOf<MdrCity>())
-    val cityData: LiveData<List<MdrCity>> = _cityData
 
     private val _categoryData: MutableLiveData<List<MdrCategory>> =
         MutableLiveData(listOf<MdrCategory>())
@@ -40,7 +38,6 @@ class AddNewServiceFragmentViewmodel @Inject constructor(private val repository:
     var transactionDateFormatted:MutableLiveData<String> = MutableLiveData("")
 
     init {
-        getAllCities()
         getAllDivisions()
     }
 
@@ -53,22 +50,11 @@ class AddNewServiceFragmentViewmodel @Inject constructor(private val repository:
     val _doctorName: MutableLiveData<String> = MutableLiveData("")
     val doctorName: LiveData<String> = _doctorName
 
-    private val _city: MutableLiveData<String> = MutableLiveData("")
-    val city: LiveData<String> = _city
-
     val _transactionAmount: MutableLiveData<String> = MutableLiveData("")
     val transactionAmount: LiveData<String> = _transactionAmount
 
-    var selectedCityIndex: Int = -1
-        private set
     var selectedCategoryIndex: Int = -1
         private set
-
-    fun getAllCities() = viewModelScope.launch {
-        repository.getAllCityNames().collect {
-            _cityData.postValue(it)
-        }
-    }
 
     fun datePickerClicked() = viewModelScope.launch {
         newServiceEventsChannel.send(NewServiceFragmentEvents.showDatePickerDialog)
@@ -78,9 +64,6 @@ class AddNewServiceFragmentViewmodel @Inject constructor(private val repository:
         newServiceEventsChannel.send(NewServiceFragmentEvents.showNewCategoryDialog)
     }
 
-    fun addNewCityClicked() = viewModelScope.launch {
-        newServiceEventsChannel.send(NewServiceFragmentEvents.showNewCityDialog)
-    }
 
     fun getDoctorName(doctorId: Int) = viewModelScope.launch {
         repository.getDoctorName(doctorId).first().let {
@@ -88,19 +71,7 @@ class AddNewServiceFragmentViewmodel @Inject constructor(private val repository:
         }
     }
 
-    fun isCityDuplicate(input: String) = viewModelScope.launch {
-        if (cityData.value.isNullOrEmpty()) {
-            addNewCity(input)
-            newServiceEventsChannel.send(NewServiceFragmentEvents.dismissNewDivisionDialog)
-        } else if (cityData.value!!.map {
-                it.cityName.lowercase()
-            }.contains(input.lowercase())) {
-            newServiceEventsChannel.send(NewServiceFragmentEvents.showDuplicateWarningInDialog(input))
-        } else {
-            addNewCity(input)
-            newServiceEventsChannel.send(NewServiceFragmentEvents.dismissNewDivisionDialog)
-        }
-    }
+
 
     fun isDuplicateDivision(input: String) = viewModelScope.launch {
         if (categoryData.value.isNullOrEmpty()) {
@@ -118,22 +89,16 @@ class AddNewServiceFragmentViewmodel @Inject constructor(private val repository:
         }
     }
 
-    fun addNewCity(input: String) = viewModelScope.launch {
-        val city = MdrCity(cityName = input.trim())
-        repository.addNewCity(city)
-    }
-
     fun addNewCategory(category: String) = viewModelScope.launch {
         val newCategory = MdrCategory(categoryName = category.trim())
         repository.addNewCategory(newCategory)
     }
 
-    fun onSaveCtaClicked(doctorId:Int,transactionType:TransactionType) = viewModelScope.launch {
-        if (selectedCityIndex == -1) {
-            newServiceEventsChannel.send(NewServiceFragmentEvents.selectCityError)
-        } else if (selectedCategoryIndex == -1) {
+    fun onSaveCtaClicked(doctorId:Int,transactionType:TransactionType,actionType: ActionType) = viewModelScope.launch {
+
+        if (selectedCategoryIndex == -1) {
             newServiceEventsChannel.send(NewServiceFragmentEvents.selectCategoryError)
-        } else if (_transactionAmount.value.isNullOrEmpty()) {
+        } else if (_transactionAmount.value.isNullOrEmpty() || _transactionAmount.value!!.toDouble() <= 0.0) {
             newServiceEventsChannel.send(NewServiceFragmentEvents.transactionAmountError)
         }
         else if (transactionDate == 0L)
@@ -141,7 +106,33 @@ class AddNewServiceFragmentViewmodel @Inject constructor(private val repository:
             newServiceEventsChannel.send(NewServiceFragmentEvents.transactionDateError)
         }
         else {
-            addNewService(doctorId,transactionType)
+            when(actionType)
+            {
+                ActionType.ACTION_TYPE_NEW -> addNewService(doctorId,transactionType)
+                ActionType.ACTION_TYPE_EDIT -> {
+                    editService(existingTransactionDetails)
+                    newServiceEventsChannel.send(NewServiceFragmentEvents.showTransactionUpdatedMessage)
+                }
+                ActionType.ACTION_TYPE_DELETE -> {}
+            }
+        }
+    }
+
+    private suspend fun editService(
+        existingTransactionDetails: MutableLiveData<MdrService>,
+    ) {
+        var serviceDetails = existingTransactionDetails.value!!
+        serviceDetails = serviceDetails.copy(categoryId = _categoryData.value!![selectedCategoryIndex].categoryID,
+            serviceAmount = _transactionAmount.value!!.toDouble(),
+            serviceDate = Date(transactionDate),
+            updatedOn = System.currentTimeMillis())
+        repository.updateService(serviceDetails)
+    }
+
+    fun onDeleteCtaClicked()
+    {
+        viewModelScope.launch {
+            newServiceEventsChannel.send(NewServiceFragmentEvents.showDeleteWarningDialog)
         }
     }
 
@@ -151,7 +142,7 @@ class AddNewServiceFragmentViewmodel @Inject constructor(private val repository:
                 servicedDoctorId = doctorId,
                 serviceAmount = transactionAmount.value?.toDouble() ?: 0.0,
                 categoryId = categoryData.value!![selectedCategoryIndex].categoryID,
-                cityId = cityData.value!![selectedCityIndex].cityId,
+                cityId = cityId,
                 serviceDate = Date(transactionDate),
                 transactionType = transactionType.toString())
             repository.addNewService(newService)
@@ -166,10 +157,6 @@ class AddNewServiceFragmentViewmodel @Inject constructor(private val repository:
         }
     }
 
-    fun updateSelectedCity(index: Int) {
-        selectedCityIndex = index
-        Log.d("City Index", "updateSelectedCity: $selectedCityIndex")
-    }
 
     fun updateSelectedCategory(index: Int) {
         selectedCategoryIndex = index
@@ -180,14 +167,61 @@ class AddNewServiceFragmentViewmodel @Inject constructor(private val repository:
         transactionDateFormatted.value = DateUtils.fromLongToDateString(transactionDate,DateFormatProvider.DATE_FORMAT_MMM_DD_YYYY)
     }
 
+    fun setDoctorCity(doctorCityId: Int) {
+        cityId = doctorCityId
+    }
+
+    fun deleteTransaction() {
+        viewModelScope.launch {
+            if (existingTransactionId != -1)
+            {
+                repository.deleteTransaction(existingTransactionId)
+                newServiceEventsChannel.send(NewServiceFragmentEvents.showTransactionDeletedMessage)
+            }
+        }
+    }
+
+    fun updateExistingTransactionId(transactionId: Int) {
+        if (transactionId != -1)
+        {
+            existingTransactionId = transactionId
+            prefillTransactionDetails(transactionId)
+        }
+    }
+
+    private fun prefillTransactionDetails(transactionId: Int) {
+       viewModelScope.launch {
+           repository.getTransactionById(transactionId).first().let{
+               existingTransactionDetails.postValue(it)
+               val divisionIndex = getDivisionIndexById(it.categoryId)
+               if (divisionIndex != -1)
+               {
+                   updateSelectedCategory(divisionIndex)
+                   newServiceEventsChannel.send(NewServiceFragmentEvents.prefillDivisionName(divisionIndex))
+               }
+               _transactionAmount.postValue(it.serviceAmount.toString())
+               updateTransactionDate(it.serviceDate!!.time)
+
+           }
+       }
+    }
+
+    private fun getDivisionIndexById(categoryId: Int): Int {
+        _categoryData.value!!.forEachIndexed { index,value ->
+            if (value.categoryID == categoryId)
+            {
+                return index
+            }
+        }
+        return -1
+    }
+
 
 }
 
 sealed class NewServiceFragmentEvents {
     object showNewCategoryDialog : NewServiceFragmentEvents()
-    object showNewCityDialog : NewServiceFragmentEvents()
     object showDatePickerDialog : NewServiceFragmentEvents()
-    object selectCityError : NewServiceFragmentEvents()
     object selectCategoryError : NewServiceFragmentEvents()
     object transactionAmountError : NewServiceFragmentEvents()
     object newServiceCreated : NewServiceFragmentEvents()
@@ -195,4 +229,8 @@ sealed class NewServiceFragmentEvents {
     data class showDuplicateWarningInDialog(val input: String) : NewServiceFragmentEvents()
     object transactionDateError: NewServiceFragmentEvents()
     object newCollectionCreated:NewServiceFragmentEvents()
+    object showDeleteWarningDialog : NewServiceFragmentEvents()
+    object showTransactionDeletedMessage : NewServiceFragmentEvents()
+    object showTransactionUpdatedMessage : NewServiceFragmentEvents()
+    data class prefillDivisionName(val index:Int) : NewServiceFragmentEvents()
 }

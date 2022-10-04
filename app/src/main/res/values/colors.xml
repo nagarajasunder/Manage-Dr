@@ -11,4 +11,5 @@
     <color name="dark_mode">#121212</color>
     <color name="currency_green">#118C4F</color>
     <color name="currency_red">#cc0202</color>
+    <color name="delete_cta_color">#C70000</color>
 </resources>

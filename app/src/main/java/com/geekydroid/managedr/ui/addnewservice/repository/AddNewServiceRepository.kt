@@ -28,7 +28,6 @@ class AddNewServiceRepository @Inject constructor(
 
     fun getDoctorName(doctorId: Int) = doctorDao.getDoctorName(doctorId)
 
-    fun getAllCityNames(): Flow<List<MdrCity>> = cityDao.getAllCities()
 
     suspend fun addNewCity(city: MdrCity) = externalScope.launch(externalDispatcher) {
         cityDao.insertNewCity(city)
@@ -39,8 +38,17 @@ class AddNewServiceRepository @Inject constructor(
     }.join()
 
     fun getAllDivisionNames():Flow<List<MdrCategory>> = categoryDao.getAllCategories()
-    fun addNewCategory(newCategory: MdrCategory) = externalScope.launch(externalDispatcher) {
+    suspend fun addNewCategory(newCategory: MdrCategory) = externalScope.launch(externalDispatcher) {
         categoryDao.insertNewCategory(newCategory)
+    }.join()
+
+    suspend fun deleteTransaction(existingTransactionId: Int) = externalScope.launch(externalDispatcher) {
+        serviceDao.deleteTransactionById(existingTransactionId)
+    }.join()
+
+    fun getTransactionById(transactionId: Int) = serviceDao.getTransactionDetailsById(transactionId)
+    suspend fun updateService(serviceDetails: MdrService) = externalScope.launch(externalDispatcher) {
+        serviceDao.updateService(serviceDetails)
     }
 
 }

@@ -1,6 +1,8 @@
 package com.geekydroid.managedr.utils
 
+import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 object DateUtils {
@@ -19,5 +21,7 @@ object DateUtils {
         }
         return null
     }
+
+    fun getTimeStampFormatted(): String  = DateFormat.getDateTimeInstance().format(System.currentTimeMillis())
 
 }

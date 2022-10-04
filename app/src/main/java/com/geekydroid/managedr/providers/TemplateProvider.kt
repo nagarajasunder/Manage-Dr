@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.geekydroid.managedr.application.ScreenData
 import com.geekydroid.managedr.ui.add_doctor.model.HomeScreenDoctorData
 import com.geekydroid.managedr.ui.doctordashboard.model.DoctorDashboardTxData
+import com.geekydroid.managedr.ui.settings.model.SettingsEditData
 import com.geekydroid.managedr.utils.UiOnClickListener
 
 private const val TAG = "TemplateProvider"
@@ -37,6 +38,10 @@ object TemplateProvider {
         {
             return oldItem.transactionId == newItem.transactionId
         }
+        else if (oldItem is SettingsEditData && newItem is SettingsEditData)
+        {
+            return oldItem.id == newItem.id
+        }
         return false
     }
 
@@ -45,6 +50,10 @@ object TemplateProvider {
             return oldItem == newItem
         }
         else if (oldItem is DoctorDashboardTxData && newItem is DoctorDashboardTxData)
+        {
+            return oldItem == newItem
+        }
+        else if (oldItem is SettingsEditData && newItem is SettingsEditData)
         {
             return oldItem == newItem
         }

@@ -14,11 +14,19 @@
         <action
             android:id="@+id/action_homeFragment_to_doctorDashboardFragment"
             app:destination="@id/doctorDashboardFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addNewDoctorFragment"
         android:name="com.geekydroid.managedr.ui.add_doctor.fragment.AddNewDoctorFragment"
-        android:label="AddNewDoctorFragment" />
+        android:label="AddNewDoctorFragment" >
+        <argument
+            android:name="doctor_id"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
     <fragment
         android:id="@+id/doctorDashboardFragment"
         android:name="com.geekydroid.managedr.ui.doctordashboard.view.DoctorDashboardFragment"
@@ -29,6 +37,9 @@
         <action
             android:id="@+id/action_doctorDashboardFragment_to_newServiceFragment"
             app:destination="@id/newServiceFragment" />
+        <action
+            android:id="@+id/action_doctorDashboardFragment_to_addNewDoctorFragment"
+            app:destination="@id/addNewDoctorFragment" />
     </fragment>
     <fragment
         android:id="@+id/newServiceFragment"
@@ -40,5 +51,26 @@
         <argument
             android:name="transactionType"
             app:argType="com.geekydroid.managedr.application.TransactionType" />
+        <argument
+            android:name="cityId"
+            app:argType="integer" />
+        <argument
+            android:name="existingTransactionId"
+            app:argType="integer" />
+        <argument
+            android:name="actionType"
+            app:argType="com.geekydroid.managedr.ui.settings.model.ActionType" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.geekydroid.managedr.ui.settings.ui.SettingsFragment"
+        android:label="SettingsFragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_cityDivisionFragment"
+            app:destination="@id/cityDivisionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cityDivisionFragment"
+        android:name="com.geekydroid.managedr.ui.settings.ui.CityDivisionFragment"
+        android:label="CityDivisionFragment" />
 </navigation>
