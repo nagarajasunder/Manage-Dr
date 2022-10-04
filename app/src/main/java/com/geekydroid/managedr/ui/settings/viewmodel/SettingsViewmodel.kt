@@ -21,20 +21,21 @@ class SettingsViewmodel @Inject constructor(
     val events:Flow<SettingsEvents> = eventChannel.receiveAsFlow()
 
     fun exportDataClicked() = viewModelScope.launch {
-        eventChannel.send(SettingsEvents.openFilePicker)
+        val count = repository.getTransactionCount()
+        if (count > 0)
+        {
+            eventChannel.send(SettingsEvents.openFilePicker)
+        }
+        else
+        {
+            eventChannel.send(SettingsEvents.showNoTransactionError)
+        }
+
     }
 
     fun exportData(uri: Uri?) {
         viewModelScope.launch {
-            val count = repository.getTransactionCount()
-            if (count > 0)
-            {
-                eventChannel.send(SettingsEvents.exportDataToExcel(uri!!))
-            }
-            else
-            {
-                eventChannel.send(SettingsEvents.showNoTransactionError)
-            }
+            eventChannel.send(SettingsEvents.exportDataToExcel(uri!!))
         }
     }
 
