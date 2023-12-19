@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -25,18 +26,24 @@ import com.geekydroid.managedr.utils.DateUtils
 import com.geekydroid.managedr.utils.DialogInputType
 import com.geekydroid.managedr.utils.GenericDialogOnClickListener
 import com.geekydroid.managedr.utils.uiutils.PickerUtils
+import com.geekydroid.managedr.viewmodel.ManageDrViewModelFactory
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 private const val TAG = "AddNewDoctorFragment"
 @AndroidEntryPoint
 class AddNewDoctorFragment : Fragment(), GenericDialogOnClickListener {
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var newCityFragment:NewDivisionFragment
     private lateinit var binding: FragmentAddNewDoctorBinding
-    private val viewmodel: AddNewDoctorViewModel by viewModels()
+    private val viewmodel: AddNewDoctorViewModel by viewModels {
+        viewModelFactory
+    }
     private lateinit var host: FragmentActivity
     private var citySpinnerList: MutableList<String> = mutableListOf("Select a city")
     private lateinit var citySpinnerAdapter: ArrayAdapter<String>

@@ -96,6 +96,10 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:2.41"
     implementation 'com.google.dagger:dagger-android-support:2.41'
 
+    //Dagger
+    implementation 'com.google.dagger:dagger:2.41'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.41'
+
     //Datastore preferences
     implementation "androidx.datastore:datastore:1.0.0"
     implementation "androidx.datastore:datastore-preferences:1.0.0"
@@ -112,5 +116,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test:rules:1.4.0'
+
+    //Fragment Testing
+    def fragment_version = "1.5.5"
+
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
 
 }

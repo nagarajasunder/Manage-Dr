@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
 class AddNewDoctorViewModel @Inject constructor(private val repository: DoctorRepository) :
     ViewModel() {
 
