@@ -2,6 +2,10 @@ package com.geekydroid.managedr.ui.add_doctor
 
 
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.geekydroid.managedr.launchFragmentInHiltContainer
 import com.geekydroid.managedr.ui.add_doctor.fragment.AddNewDoctorFragment
@@ -28,9 +32,8 @@ class AddDoctorFragmentTest {
     @Test
     fun dummy() {
         launchFragmentInHiltContainer<AddNewDoctorFragment>{
-
         }
-
+        onView(withText("Add New Doctor")).check(matches(isDisplayed()))
     }
 
 }
