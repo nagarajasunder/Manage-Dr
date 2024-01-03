@@ -1,9 +1,12 @@
 package com.geekydroid.managedr.ui.addnewservice.model
 
-import androidx.room.*
-import androidx.room.ForeignKey.CASCADE
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.ForeignKey.Companion.CASCADE
+import androidx.room.PrimaryKey
 import com.geekydroid.managedr.ui.add_doctor.model.MdrDoctor
-import java.util.*
+import java.util.Date
 
 @Entity(
     tableName = "MDR_SERVICE",

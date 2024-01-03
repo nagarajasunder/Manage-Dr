@@ -1,10 +1,9 @@
 package com.geekydroid.managedr.ui.addnewservice.dao
 
 import androidx.room.*
-import androidx.room.OnConflictStrategy.REPLACE
+import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.geekydroid.managedr.ui.addnewservice.model.MdrService
-import com.geekydroid.managedr.ui.doctordashboard.model.DashboardFilters
 import com.geekydroid.managedr.ui.doctordashboard.model.DoctorDashboardTxData
 import com.geekydroid.managedr.ui.settings.model.ExportDoctorData
 import kotlinx.coroutines.flow.Flow

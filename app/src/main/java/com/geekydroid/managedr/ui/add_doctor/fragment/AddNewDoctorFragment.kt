@@ -65,7 +65,7 @@ class AddNewDoctorFragment : Fragment(), GenericDialogOnClickListener {
         binding.viewmodel = viewmodel
         binding.lifecycleOwner = viewLifecycleOwner
         host = requireActivity()
-        viewmodel.updateExistingDoctorId(args.doctorId)
+//        viewmodel.updateExistingDoctorId(args.doctorId)
 
         setUI()
         observeUiEVents()

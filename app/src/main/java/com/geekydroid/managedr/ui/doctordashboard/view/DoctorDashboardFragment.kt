@@ -218,8 +218,7 @@ class DoctorDashboardFragment : Fragment(),UiOnClickListener {
     }
 
     private fun openEditDoctorScreen() {
-        val action = DoctorDashboardFragmentDirections.actionDoctorDashboardFragmentToAddNewDoctorFragment()
-        action.doctorId = doctorId
+        val action = DoctorDashboardFragmentDirections.actionDoctorDashboardFragmentToAddNewDoctorFragment(doctorId)
         findNavController().navigate(action)
     }
 
