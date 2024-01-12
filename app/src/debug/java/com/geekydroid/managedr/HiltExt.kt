@@ -12,6 +12,9 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import com.geekydroid.managedr.R
+import com.geekydroid.managedr.ui.add_doctor.fragment.AddNewDoctorFragment
+import com.geekydroid.managedr.ui.add_doctor.viewmodel.AddNewDoctorViewModel
+import com.geekydroid.managedr.utils.ViewModelUtil
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @SuppressLint("RestrictedApi")

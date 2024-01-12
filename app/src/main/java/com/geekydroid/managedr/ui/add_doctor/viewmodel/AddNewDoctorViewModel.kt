@@ -1,5 +1,6 @@
 package com.geekydroid.managedr.ui.add_doctor.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,13 +10,15 @@ import com.geekydroid.managedr.ui.add_doctor.model.MdrDoctor
 import com.geekydroid.managedr.ui.add_doctor.repository.DoctorRepository
 import com.geekydroid.managedr.ui.addnewservice.model.MdrCity
 import com.geekydroid.managedr.utils.DateUtils
+import com.geekydroid.managedr.utils.EspressoIdlingResource
 import com.geekydroid.managedr.utils.TextUtils
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val TAG = "AddNewDoctorViewModel"
 
 class AddNewDoctorViewModel @Inject constructor(private val repository: DoctorRepository) :
     ViewModel() {
@@ -23,9 +26,6 @@ class AddNewDoctorViewModel @Inject constructor(private val repository: DoctorRe
     private val _cityData:MutableLiveData<List<MdrCity>> = MutableLiveData()
     val cityData:LiveData<List<MdrCity>> = _cityData
 
-    init {
-        getCityData()
-    }
 
     var selectedCityIndex:Int = -1
         private set
@@ -35,10 +35,17 @@ class AddNewDoctorViewModel @Inject constructor(private val repository: DoctorRe
     private val AddNewDoctorEventsChannel = Channel<AddNewDoctorEvents>()
     val AddNewDoctorEvent = AddNewDoctorEventsChannel.receiveAsFlow()
 
-    private fun getCityData() {
+    init {
+        Log.d(TAG, "${repository.javaClass.name} ")
+        getCityData()
+    }
+
+    fun getCityData() {
+        //EspressoIdlingResource.increment()
         viewModelScope.launch {
             repository.getAllCities().collect{ names ->
                 _cityData.postValue(names)
+                //EspressoIdlingResource.decrement()
             }
         }
     }

@@ -6,6 +6,7 @@ import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -24,6 +25,7 @@ import com.geekydroid.managedr.ui.add_doctor.viewmodel.AddNewDoctorViewModel
 import com.geekydroid.managedr.ui.dialogs.NewDivisionFragment
 import com.geekydroid.managedr.utils.DateUtils
 import com.geekydroid.managedr.utils.DialogInputType
+import com.geekydroid.managedr.utils.EspressoIdlingResource
 import com.geekydroid.managedr.utils.GenericDialogOnClickListener
 import com.geekydroid.managedr.utils.uiutils.PickerUtils
 import com.geekydroid.managedr.viewmodel.ManageDrViewModelFactory
@@ -35,10 +37,8 @@ import javax.inject.Inject
 
 private const val TAG = "AddNewDoctorFragment"
 @AndroidEntryPoint
-class AddNewDoctorFragment : Fragment(), GenericDialogOnClickListener {
+class AddNewDoctorFragment(val viewModelFactory:ViewModelProvider.Factory) : Fragment(), GenericDialogOnClickListener {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var newCityFragment:NewDivisionFragment
     private lateinit var binding: FragmentAddNewDoctorBinding
     private val viewmodel: AddNewDoctorViewModel by viewModels {
@@ -54,7 +54,6 @@ class AddNewDoctorFragment : Fragment(), GenericDialogOnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_add_new_doctor, container, false)
         return binding.root
@@ -91,7 +90,7 @@ class AddNewDoctorFragment : Fragment(), GenericDialogOnClickListener {
     private fun setupCitySpinner(cityList: List<String>) {
         citySpinnerList.clear()
         citySpinnerList.addAll(cityList)
-        Log.d(TAG, "setupCitySpinner: $citySpinnerList")
+        EspressoIdlingResource.increment()
         citySpinnerAdapter = ArrayAdapter(requireContext(),
             android.R.layout.simple_dropdown_item_1line,
             citySpinnerList)
@@ -99,6 +98,7 @@ class AddNewDoctorFragment : Fragment(), GenericDialogOnClickListener {
         if (viewmodel.selectedCityIndex != -1) {
             (binding.spinnerCity.editText as AutoCompleteTextView).setText(citySpinnerList[viewmodel.selectedCityIndex],false)
         }
+        EspressoIdlingResource.decrement()
     }
 
     private fun setUI() {

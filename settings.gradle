@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Manage Dr"
 include ':app'
+include ':shared-test'
